@@ -5,7 +5,9 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>Osm2GpsMid</name>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.FBrowser.dir"/>
+                <root id="src.src.dir"/>
+                <root id="src.external_src.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>
