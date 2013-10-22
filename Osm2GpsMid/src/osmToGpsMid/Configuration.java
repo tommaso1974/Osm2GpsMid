@@ -741,7 +741,7 @@ public class Configuration {
         }
 
 
-       // URL propertiesAddress = getClass().getResource("/version.properties");
+        // URL propertiesAddress = getClass().getResource("/version.properties");
         //vb = new PropertyResourceBundle(propertiesAddress.openStream());
 
         readBounds();

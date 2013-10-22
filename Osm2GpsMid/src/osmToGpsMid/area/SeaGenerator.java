@@ -20,7 +20,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import uk.me.parabola.log.Logger;
-import osmToGpsMid.area.LineClipper;
 import uk.me.parabola.mkgmap.reader.osm.FakeIdGenerator;
 import osmToGpsMid.Configuration;
 import osmToGpsMid.MyMath;

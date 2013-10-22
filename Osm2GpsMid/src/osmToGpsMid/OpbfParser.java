@@ -15,7 +15,6 @@ import java.util.List;
 
 import crosby.binary.BinaryParser;
 import crosby.binary.Osmformat;
-import crosby.binary.Osmformat.DenseInfo;
 import crosby.binary.Osmformat.DenseNodes;
 import crosby.binary.Osmformat.HeaderBlock;
 import crosby.binary.file.BlockInputStream;
