@@ -304,12 +304,10 @@ public class OpbfParser extends OsmParser {
 
     public OpbfParser(InputStream i) {
         super(i);
-
     }
 
     public OpbfParser(InputStream i, Configuration c) {
         super(i, c);
-
     }
 
     @Override
@@ -323,8 +321,7 @@ public class OpbfParser extends OsmParser {
             startTime = System.currentTimeMillis();
             BlockInputStream bis = new BlockInputStream(i, new OsmPbfHandler());
             System.out.println("Start of Document");
-            System.out
-                    .println("Nodes read/used, Ways read/used, Relations read/partial/used");
+            System.out.println("Nodes read/used, Ways read/used, Relations read/partial/used");
             bis.process();
             System.out.println("Nodes " + nodeTot + "/" + nodeIns + ", Ways "
                     + wayTot + "/" + wayIns + ", Relations " + relTot + "/"

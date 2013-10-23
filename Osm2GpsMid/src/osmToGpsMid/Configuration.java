@@ -35,8 +35,12 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.tools.bzip2.CBZip2InputStream;
+import osm2gpsmid.OsmCommonUtils;
+import osm2gpsmid.PropertiesFileReader;
 
 import osmToGpsMid.model.Bounds;
 import osmToGpsMid.model.EntityDescription;
@@ -498,7 +502,7 @@ public class Configuration {
     /**
      * Bounding boxes, read from properties and/or drawn by the user on the map.
      */
-    private final Vector<Bounds> bounds;
+    private Vector<Bounds> bounds;
     /**
      * Route Destinations, read from properties and/or set by the user on the
      * map.
@@ -519,7 +523,7 @@ public class Configuration {
     /**
      * Singleton reference
      */
-    private static Configuration conf;
+    private static Configuration conf = null;
     private Area area;
 
     /**
@@ -543,88 +547,107 @@ public class Configuration {
     public static Configuration getConfiguration() {
         return conf;
     }
-
+    
     public Configuration(String[] args) {
-        //Set singleton
-        conf = this;
+        try {
+            //Set singleton
+            conf = this;
 
-        resetColors();
+            resetColors();
 
-        bounds = new Vector<Bounds>(MAX_BOUND_BOXES);
+            bounds = new Vector<Bounds>(MAX_BOUND_BOXES);
 
-        for (String arg : args) {
-            if (arg.startsWith("--")) {
-                if (arg.startsWith("--bounds=")) {
-                    String bound = arg.substring(9);
-                    System.out.println("Found bound: " + bound);
-                    String[] boundValues = bound.split(",");
-                    if (boundValues.length == 4) {
-                        Bounds b = new Bounds();
-                        try {
-                            b.minLon = Float.parseFloat(boundValues[0]);
-                            b.minLat = Float.parseFloat(boundValues[1]);
-                            b.maxLon = Float.parseFloat(boundValues[2]);
-                            b.maxLat = Float.parseFloat(boundValues[3]);
-                        } catch (NumberFormatException nfe) {
-                            System.out.println("ERROR: invalid coordinate specified in bounds");
-                            nfe.printStackTrace();
+            for (String arg : args) {
+                if (arg.startsWith("--")) {
+                    if (arg.startsWith("--bounds=")) {
+                        String bound = arg.substring(9);
+                        System.out.println("Found bound: " + bound);
+                        String[] boundValues = bound.split(",");
+                        if (boundValues.length == 4) {
+                            Bounds b = new Bounds();
+                            try {
+                                b.minLon = Float.parseFloat(boundValues[0]);
+                                b.minLat = Float.parseFloat(boundValues[1]);
+                                b.maxLon = Float.parseFloat(boundValues[2]);
+                                b.maxLat = Float.parseFloat(boundValues[3]);
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("ERROR: invalid coordinate specified in bounds");
+                                nfe.printStackTrace();
+                                System.exit(1);
+                            }
+                            bounds.add(b);
+                        } else {
+                            System.out.println("ERROR: Invalid bounds parameter, should be specified as --bounds=left,bottom,right,top");
                             System.exit(1);
                         }
-                        bounds.add(b);
-                    } else {
-                        System.out.println("ERROR: Invalid bounds parameter, should be specified as --bounds=left,bottom,right,top");
-                        System.exit(1);
                     }
-                }
-                if (arg.startsWith("--cellID=")) {
-                    // Filename for a list of GSM cellIDs with their coordinates.
-                    // This file can be obtained from http://dump.opencellid.org/cellsIdData/ (OpenCellID.org)
-                    cellSource = arg.substring(9);
-                    // TODO: Shouldn't cellOperator be set too?
-                }
-                if (arg.startsWith("--mapzip")) {
-                    // create a map zip instead of bundle jar
-                    mapzip = true;
-                }
-                if (arg.startsWith("--nogui")) {
-                    // makes argument length to be 2 so GUI will not be started
-                }
-                if (arg.startsWith("--properties=")) {
-                    // specify a properties file (which can specify the map file)
-                    propFile = arg.substring(13);
-                }
-                if (arg.startsWith("--map.name=")) {
-                    // give name to the map zip
-                    mapName = arg.substring(11);
-                }
-                if (arg.startsWith("--help")) {
-                    System.err.println("Usage: Osm2GpsMid [--bounds=left,bottom,right,top] [--cellID=filename] planet.osm.bz2 | planet.osm.pbf | http://address.to.planet/file.osm.pbf | properties.properties [properties] ");
-                    System.err.println("  \"--bounds=\" specifies the set of bounds to use in GpsMid ");
-                    System.err.println("       Can be left out to use the regions specified in location.properties");
-                    System.err.println("       or if you want to create a GpsMid for the whole region");
-                    System.err.println("       contained in the.osm(.bz2) file");
-                    System.err.println("  \"--cellID=\" specifies the file from which to load cellIDs for cell based positioning");
-                    System.err.println("       The data comes from OpenCellId.org and the file can be found at http://dump.opencellid.org/cellsIdData/");
-                    System.err.println("  \"--map.name=\" specifies the output map zip basename");
-                    System.err.println("  \"--mapzip\" builds a map zip named by properties midlet.name");
-                    System.err.println("  \"--properties=\" points to a .properties file specifying additional parameters");
-                    System.err.println("  \"--nogui\" don't start the GUI (to be used with --properties= if map name is specified in properties)");
-                    System.err.println("  planet.osm.bz2: points to a (compressed) .osm file, overrides possible .properties mapSource");
-                    System.err.println("       By specifying osmXapi, the data can be fetched straight from the server (only works for small areas)");
-                    System.err.println("  properties: points to a .properties file specifying additional parameters");
-                    System.exit(0);
-                }
+                    if (arg.startsWith("--cellID=")) {
+                        // Filename for a list of GSM cellIDs with their coordinates.
+                        // This file can be obtained from http://dump.opencellid.org/cellsIdData/ (OpenCellID.org)
+                        cellSource = arg.substring(9);
+                        // TODO: Shouldn't cellOperator be set too?
+                    }
+                    if (arg.startsWith("--mapzip")) {
+                        // create a map zip instead of bundle jar
+                        mapzip = true;
+                    }
+                    if (arg.startsWith("--nogui")) {
+                        // makes argument length to be 2 so GUI will not be started
+                    }
+                    if (arg.startsWith("--properties=")) {
+                        // specify a properties file (which can specify the map file)
+                        propFile = arg.substring(13);
+                    }
+                    if (arg.startsWith("--map.name=")) {
+                        // give name to the map zip
+                        mapName = arg.substring(11);
+                    }
+                    if (arg.startsWith("--help")) {
+                        System.err.println("Usage: Osm2GpsMid [--bounds=left,bottom,right,top] [--cellID=filename] planet.osm.bz2 | planet.osm.pbf | http://address.to.planet/file.osm.pbf | properties.properties [properties] ");
+                        System.err.println("  \"--bounds=\" specifies the set of bounds to use in GpsMid ");
+                        System.err.println("       Can be left out to use the regions specified in location.properties");
+                        System.err.println("       or if you want to create a GpsMid for the whole region");
+                        System.err.println("       contained in the.osm(.bz2) file");
+                        System.err.println("  \"--cellID=\" specifies the file from which to load cellIDs for cell based positioning");
+                        System.err.println("       The data comes from OpenCellId.org and the file can be found at http://dump.opencellid.org/cellsIdData/");
+                        System.err.println("  \"--map.name=\" specifies the output map zip basename");
+                        System.err.println("  \"--mapzip\" builds a map zip named by properties midlet.name");
+                        System.err.println("  \"--properties=\" points to a .properties file specifying additional parameters");
+                        System.err.println("  \"--nogui\" don't start the GUI (to be used with --properties= if map name is specified in properties)");
+                        System.err.println("  planet.osm.bz2: points to a (compressed) .osm file, overrides possible .properties mapSource");
+                        System.err.println("       By specifying osmXapi, the data can be fetched straight from the server (only works for small areas)");
+                        System.err.println("  properties: points to a .properties file specifying additional parameters");
+                        System.exit(0);
+                    }
 
-            } else if ((planet == null || planet.equals("")) && !arg.endsWith(".properties")) {
-                planet = arg;
-            } else {
-                propFile = arg;
+                } else if ((planet == null || planet.equals("")) && !arg.endsWith(".properties")) {
+                    planet = arg;
+                } else {
+                    propFile = arg;
+                }
             }
+
+            initialiseRealScale();
+            initialiseTileSize();
+
+            //TODO TOMMY da chiamare la mia versione per poter verificare se tutto funziona correttamente....
+            //prima però dobbiamo effettuare la gestione della lat/lon minima e massima e creare un file di properties corretto
+            //loadPropertiesFile();
+            newLoadPropertiesFile(propFile);
+        } catch (IOException ex) {
+            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(-1);
         }
+    }
 
-        initialiseRealScale();
-        initialiseTileSize();
+    private void newLoadPropertiesFile(String propertiesFilePath) throws IOException {
 
+        PropertiesFileReader fileReader = new PropertiesFileReader();
+        fileReader.readProperty(propertiesFilePath);
+        newLoadPropFile(fileReader);
+    }
+
+    private void loadPropertiesFile() {
         try {
             InputStream cf;
             if (propFile != null) {
@@ -720,6 +743,148 @@ public class Configuration {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    public void newResetConfig() {
+        bounds.removeAllElements();
+        routeList.removeAllElements();
+    }
+
+    public void newLoadPropFile(PropertiesFileReader fileReader) throws IOException {
+
+        newReadBounds(fileReader);
+        readRouteList();
+
+        setRouting(fileReader.userRouting());
+        useUrlTags = fileReader.useUserTags();
+        usePhoneTags = fileReader.usePhoneTags();
+        useHouseNumbers = fileReader.useHouseNumbers();
+        useWordSearch = fileReader.useWordSearch();
+        
+        String routingSize = getString("routing.maxTileSize");
+        if(routingSize != null && !routingSize.isEmpty()){
+            maxRouteTileSize = Integer.parseInt(routingSize); 
+        }
+
+        setIcons(fileReader.useIcons());
+        if (attrToBoolean(useIcons) == 0 && !(useIcons.equals("small") || useIcons.equals("big") || useIcons.equals("large") || useIcons.equals("huge"))) {
+            System.out.println("ERROR: Invalid properties file parameter useIcons=" + getString("useIcons"));
+            System.exit(1);
+        }
+
+        if(fileReader.addToManifest() != null)
+            setAddToManifest(fileReader.addToManifest());
+        
+        if(fileReader.soundsSourceFilesType() != null)
+            setSounds(fileReader.soundsSourceFilesType());
+
+        // don't override map source set by command line with one from .properties
+        // also don't override one set by GUI with an empty one from properties
+        String mapSource = fileReader.mapSource();
+        if ((planet == null || planet.equals(""))) {
+            if(mapSource != null && !mapSource.isEmpty())
+                setPlanetName(mapSource);
+        }
+
+        useSoundFiles = fileReader.useSoundFilesWithSyntax();
+
+        // don't override cell source set by command line with one from .properties
+        // also don't override one set by GUI with an empty one from properties
+        if ((cellSource == null || cellSource.equals(""))) {
+            
+            if(getString("cellSource") != null && !getString("cellSource").isEmpty())
+                setCellSource(getString("cellSource"));
+        }
+
+        setDontCompress(fileReader.dontCompressLowerCase());
+
+        populateLangFields(fileReader);
+
+        if (getString("maxTileSize") != null) {
+
+            if (!getString("maxTileSize").isEmpty()) {
+                maxTileSize = Integer.parseInt(getString("maxTileSize"));
+            }
+        }
+        
+        if(getString("maxDictDepth") != null && !getString("maxDictDepth").isEmpty())
+            maxDictDepth = Integer.parseInt(getString("maxDictDepth"));
+        
+        if(getString("mapPrecisionInMeters") != null && !getString("mapPrecisionInMeters").isEmpty())
+            mapPrecisionInMeters = Double.parseDouble(getString("mapPrecisionInMeters"));
+
+        for (int i = 0; i <= 3; i++) {
+            
+            if(getString("maxTileWays" + i) != null && !getString("maxTileWays" + i).isEmpty()){
+                maxTileWays[i] = Integer.parseInt(getString("maxTileWays" + i));
+            }
+        }
+
+        tileSize[tileSize.length - 1] = new TileSizeDescription(maxDictDepth, maxTileWays[0], maxTileWays[1], maxTileWays[2], maxTileWays[3], maxTileSize, maxRouteTileSize);
+
+        setStyleFileName(fileReader.style_file());
+        setCodeBase(fileReader.app());
+        enableEditingSupport = getString("enableEditing").equalsIgnoreCase("true");
+        cellOperator = getString("useCellID");
+        cellIDnoLAC = getString("cellIDnoLAC").equalsIgnoreCase("true");
+        generateSea = getString("generateSea").equalsIgnoreCase("true");
+        useSeaTiles = getString("useSeaTiles").equalsIgnoreCase("true");
+        signApk = getString("signApk").equalsIgnoreCase("true");
+        jarsignerPath = getString("jarsignerPath");
+        triangleAreaFormat = getString("triangleAreaFormat").equalsIgnoreCase("true");
+        useBarriers = getString("useBarriers").equalsIgnoreCase("true");
+        writeTriangleAreaFormat = getString("triangleAreaFormat").equalsIgnoreCase("true");
+        outlineAreaFormat = getString("outlineAreaFormat").equalsIgnoreCase("true");
+        if (outlineAreaFormat && !triangleAreaFormat) {
+            System.out.println("WARNING: Turning on triangle generation, currently can't create a map without generating triangles even when using outline area format");
+            System.out.println("Triangle block however will not written to data");
+            triangleAreaFormat = true;
+        }
+        signApkPassword = getString("signApkPassword");
+        drawSeaOutlines = getString("drawSeaOutlines").equalsIgnoreCase("true");
+    }
+
+    private void populateLangFields(PropertiesFileReader fileReader) {
+        String lang = fileReader.lang();
+        setUseLang(lang);
+        if (!lang.equals("*")) {
+            setUseLang(fileReader.userLang());
+        }
+
+        String langName = fileReader.langName();
+        String userLangName = fileReader.userLangName();
+
+        setUseLangName(langName);
+        if (!userLangName.equals("All")) {
+            setUseLangName(userLangName);
+        }
+        // default to language code for language name if not defined
+        if (!getUseLang().equals("*") && getUseLangName().equals("All")) {
+            useLangName = useLang;
+        }
+
+        if (useLang.indexOf(",*") > -1) {
+            allLang = true;
+            // * should be last, ignore it
+            useLang = useLang.substring(0, useLang.indexOf(",*"));
+        }
+        if (useLang.indexOf("*") > -1) {
+            allLang = true;
+            // * should be last, ignore it
+            useLang = useLang.substring(0, useLang.indexOf("*"));
+        }
+        // add English if not there
+        //if (! (useLang.indexOf("en" ) > -1)) {
+        //	useLang += ",en";
+        //	useLangName += ",English";
+        //}
+        if (useLang.equals("")) {
+            useLang = "devdefault";
+            useLangName = "Device's default";
+        } else {
+            useLang = "devdefault," + useLang;
+            useLangName = "Device's default," + useLangName;
         }
     }
 
@@ -871,7 +1036,7 @@ public class Configuration {
      * @param name File name (may include path) of the style-file
      */
     public void setStyleFileName(String name) throws IOException {
-        styleFile = name;
+        styleFile = name.trim();
         try {
             legendInputStream = new FileInputStream(styleFile);
             System.out.println("Using style file '" + styleFile + "' from file system");
@@ -953,8 +1118,9 @@ public class Configuration {
 //				System.out.println(vb.getString(key));
             return vb.getString(key).trim();
         } catch (Exception e1) {
-            e1.printStackTrace();
-            return null;
+            //e1.printStackTrace();
+           // return null;
+            return "";
         }
     }
 
@@ -1193,13 +1359,20 @@ public class Configuration {
         return getTempBaseDir() + "/" + "map";
     }
 
-    public String getTempBaseDir() {
-        if (tempDir == null) {
-            tempDir = "temp" + Math.abs(new Random(System.currentTimeMillis()).nextLong());
-        }
-        return tempDir;
-//			return getString("tmp.dir");
+    public String getOsmBaseDir(){
+        return OsmCommonUtils.getBaseFolder();
     }
+    
+    public String getTempBaseDir() {
+        return getOsmBaseDir();
+    }
+//    public String getTempBaseDir() {
+//        if (tempDir == null) {
+//            tempDir = "temp" + Math.abs(new Random(System.currentTimeMillis()).nextLong());
+//        }
+//        return tempDir;
+////			return getString("tmp.dir");
+//    }
 
     public boolean cleanupTmpDirAfterUse() {
         if ("true".equalsIgnoreCase(getString("keepTemporaryFiles"))) {
@@ -1412,8 +1585,9 @@ public class Configuration {
                 i++;
             }
         } catch (RuntimeException e) {
-            ;
         }
+
+
         if (i > 0) {
             System.out.println("Found " + i + " route destinations");
             for (int l = 0; l < i; l++) {
@@ -1437,6 +1611,29 @@ public class Configuration {
         return bounds;
     }
 
+    
+    /**
+     * Reads bounds from the current properties file (defined by 'rb') or,
+     * theoretically from version.properties, but this doesn't contain any
+     * bounds, and puts them in the vector 'bounds'. The limit of
+     * MAX_BOUND_BOXES is considered.
+     */
+    public void newReadBounds(PropertiesFileReader fileReader) {
+        bounds.removeAllElements();
+
+        Bounds bound = new Bounds();
+        
+        float minLat = fileReader.minLatFloat();
+        float maxLat = fileReader.maxLatFloat();
+        float minLon = fileReader.minLonFloat();
+        float maxLon = fileReader.maxLonFloat();
+        
+        bound.extend(minLat, minLon);
+        bound.extend(maxLat, maxLon);
+        
+        bounds.add(bound);
+    }
+    
     /**
      * Reads bounds from the current properties file (defined by 'rb') or,
      * theoretically from version.properties, but this doesn't contain any
@@ -1504,14 +1701,15 @@ public class Configuration {
     }
 
     public void setAddToManifest(String line) {
-        addToManifest = line.trim();
+        if(line != null)
+            addToManifest = line.trim();
     }
 
     public String getAddToManifest() {
         return addToManifest;
     }
 
-    public void setSounds(String sounds) {
+    public void setSounds(String sounds) {        
         if (attrToBoolean(sounds) > 0) {
             useSounds = "amr";
         } else if (attrToBoolean(sounds) < 0) {
@@ -1567,7 +1765,8 @@ public class Configuration {
      * @return Version
      */
     public String getVersion() {
-        return vb.getString("version");
+        return "0.1.0";
+        //return vb.getString("version");
     }
 
     public String getBundleDate() {

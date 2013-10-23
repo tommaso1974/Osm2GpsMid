@@ -138,13 +138,23 @@ public class BundleGpsMid implements Runnable {
 //    }
 
     private static void expand(Configuration c, String tmpDir) throws ZipException, IOException {
-        System.out.println("Preparing " + c.getJarFileName());
-        InputStream appStream = c.getJarFile();
-        if (appStream == null) {
-            System.out.println("ERROR: Couldn't find the jar file for " + c.getJarFileName());
-            System.out.println("Check the app parameter in the properties file for misspellings");
-            System.exit(1);
+        
+        System.out.println("Preparing " + c.getOsmBaseDir()  + c.getJarFileName());
+        File myfile = new File(c.getOsmBaseDir() + c.getJarFileName());
+        
+        if(!myfile.exists()){
+            myfile.createNewFile();
         }
+        
+        FileInputStream fis = new FileInputStream(myfile);
+        //FileInputStream fis = new FileInputStream(new File(c.getJarFile());
+        InputStream appStream = fis;
+        // InputStream appStream = new InputStreamnew File(c.getJarFile());
+//        if (appStream == null) {
+//            System.out.println("ERROR: Couldn't find the jar file for " + c.getJarFileName());
+//            System.out.println("Check the app parameter in the properties file for misspellings");
+//            System.exit(1);
+//        }
         File file = new File(c.getTempBaseDir() + "/" + c.getJarFileName());
         writeFile(appStream, file.getAbsolutePath());
 
@@ -605,7 +615,7 @@ public class BundleGpsMid implements Runnable {
             }
             String tmpDir = staticVariable.getConfig().getTempDir();
             System.out.println("Unpacking application to " + tmpDir);
-            expand(staticVariable.getConfig(), tmpDir);
+           // expand(staticVariable.getConfig(), tmpDir);
             File target = new File(tmpDir);
             createPath(target);
             if (staticVariable.getConfig().sourceIsApk) {

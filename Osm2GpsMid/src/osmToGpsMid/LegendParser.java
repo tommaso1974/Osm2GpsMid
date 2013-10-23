@@ -344,8 +344,7 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
     }
 
     @Override
-    public void startElement(String namespaceURI, String localName, String qName,
-            Attributes atts) {
+    public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
         // System.out.println("start " + localName + " " + qName);
         if (qName.equals("pois")) {
             readingType = READING_POIS;

@@ -38,8 +38,7 @@ public class OxParser extends OsmParser {
         @Override
         public void startDocument() {
             System.out.println("Start of Document");
-            System.out
-                    .println("Nodes read/used, Ways read/used, Relations read/partial/used");
+            System.out.println("Nodes read/used, Ways read/used, Relations read/partial/used");
         }
 
         @Override
@@ -55,8 +54,7 @@ public class OxParser extends OsmParser {
         }
 
         @Override
-        public void startElement(String namespaceURI, String localName,
-                String qName, Attributes atts) {
+        public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
             // System.out.println("start " + localName + " " + qName);
             if (qName.equals("node")) {
                 nodeTot++;

@@ -307,7 +307,7 @@ public abstract class OsmParser {
         System.out.print("---> Used memory: "
                 + df.format((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " KB / "
                 + df.format(Runtime.getRuntime().maxMemory() / 1024) + " KB");
-        
+
         for (int i = 0; i < numberOfGarbageLoops; i++) {
             System.gc();
             System.out.print(" --> gc: " + df.format((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " KB");

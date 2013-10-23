@@ -60,4 +60,12 @@ public class OsmCommonUtils {
         //     return "/home/tommaso/osm/";
         return 0;
     }
+    
+    public static String getBaseFolder(){
+         
+        if(getPathByOS() == 0)
+            return "/tmp";
+        
+        return "C:\\";
+    }
 }
