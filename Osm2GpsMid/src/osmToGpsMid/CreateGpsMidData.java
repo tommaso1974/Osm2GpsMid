@@ -629,13 +629,22 @@ public class CreateGpsMidData implements FilenameFilter {
                 // test existence of dir
                 InputStream is = null;
                 try {
-                    is = new FileInputStream(configuration.getStyleFileDirectory() + soundFileDirectoriesHelp[i].trim() + "/syntax.cfg");
+                    boolean found = false;
+                    String tmp = configuration.getStyleFileDirectory() + "media/"+ soundFileDirectoriesHelp[i].trim() + "/syntax.cfg";
+                    
+                    if(new File(tmp).exists())
+                        found = true;
+                    
+                    System.out.println("Tommaso percorso del file " + tmp);
+                    is = new FileInputStream(tmp);
+                    
+                    if(found)
+                        break;
                 } catch (Exception e) {
                     // try internal syntax.cfg
                     try {
                         is = getClass().getResourceAsStream("/media/" + soundFileDirectoriesHelp[i].trim() + "/syntax.cfg");
                     } catch (Exception e2) {
-                        ;
                     }
                 }
 

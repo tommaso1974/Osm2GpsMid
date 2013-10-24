@@ -373,10 +373,10 @@ public class BundleGpsMid implements Runnable {
             }
         }
         // System.out.println("Bundlename: " + bundleName + " jarSigner: " + jarSigner);
-
+/*
         if (StaticVariable.getGetInstance().getConfig().getMapName().equals("") && !StaticVariable.getGetInstance().getConfig().sourceIsApk) {
             writeJADfile(c, n.length());
-        }
+        }*/
         Calendar endTime = Calendar.getInstance();
         System.out.println(n.getName() + " created successfully with " + (n.length() / 1024 / 1024) + " MiB in "
                 + getDuration(endTime.getTimeInMillis() - startTime.getTimeInMillis()));
@@ -729,7 +729,7 @@ public class BundleGpsMid implements Runnable {
             if (staticVariable.getConfig().cleanupTmpDirAfterUse()) {
                 File tmpBaseDir = new File(staticVariable.getConfig().getTempBaseDir());
                 System.out.println("Cleaning up temporary directory " + tmpBaseDir);
-                deleteDirectory(tmpBaseDir);
+               // deleteDirectory(tmpBaseDir);
             }
 
             staticVariable.setCreateSuccessfully(true);
