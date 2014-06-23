@@ -170,6 +170,7 @@ public class CreateGpsMidData implements FilenameFilter {
                 System.out.println("Info: This tile level contains no routable ways");
             }
             long startTime = System.currentTimeMillis();
+
             long bytesWritten = exportMapToMid(i);
             long time = (System.currentTimeMillis() - startTime);
             System.out.println("  Zoomlevel " + i + ": "
@@ -268,9 +269,7 @@ public class CreateGpsMidData implements FilenameFilter {
         String outputMedia;
         Configuration.mapFlags = 0L;
 
-
         // FIXME add .properties & GUI user interface for telling map data source
-
         Configuration.mapFlags |= LEGEND_MAPFLAG_SOURCE_OSM_CC_BY_SA;
         // Configuration.mapFlags |= LEGEND_MAPFLAG_SOURCE_OSM_ODBL;
         // Configuration.mapFlags |= LEGEND_MAPFLAG_SOURCE_FI_LANDSURVEY;
@@ -588,7 +587,6 @@ public class CreateGpsMidData implements FilenameFilter {
                 // System.out.println(way);
             }
 
-
             if (Configuration.attrToBoolean(configuration.useIcons) < 0) {
                 System.out.println("Icons disabled - removing icon files from midlet.");
                 removeUnusedIconSizes(path, true);
@@ -630,16 +628,18 @@ public class CreateGpsMidData implements FilenameFilter {
                 InputStream is = null;
                 try {
                     boolean found = false;
-                    String tmp = configuration.getStyleFileDirectory() + "media/"+ soundFileDirectoriesHelp[i].trim() + "/syntax.cfg";
-                    
-                    if(new File(tmp).exists())
+                    String tmp = configuration.getStyleFileDirectory() + "media/" + soundFileDirectoriesHelp[i].trim() + "/syntax.cfg";
+
+                    if (new File(tmp).exists()) {
                         found = true;
-                    
+                    }
+
                     System.out.println("Tommaso percorso del file " + tmp);
                     is = new FileInputStream(tmp);
-                    
-                    if(found)
+
+                    if (found) {
                         break;
+                    }
                 } catch (Exception e) {
                     // try internal syntax.cfg
                     try {
@@ -682,7 +682,6 @@ public class CreateGpsMidData implements FilenameFilter {
                 }
                 removeUnusedSoundFormats(destSoundPath);
             }
-
 
             // show summary for copied media files
             try {
@@ -906,7 +905,7 @@ public class CreateGpsMidData implements FilenameFilter {
                         try {
                             BufferedInputStream bis = new BufferedInputStream(
                                     CreateGpsMidData.class.getResourceAsStream("/media/"
-                                    + additionalSrcPath + "/" + mediaPath));
+                                            + additionalSrcPath + "/" + mediaPath));
                             BufferedOutputStream bos = new BufferedOutputStream(
                                     new FileOutputStream(destDir + outputMediaName));
                             byte[] buf = new byte[4096];
@@ -1238,7 +1237,6 @@ public class CreateGpsMidData implements FilenameFilter {
             }
 
             // Split tile if more then 255 Ways or binary content > MAX_TILE_FILESIZE but not if only one Way
-
             // System.out.println("out.length=" + out.length + " ways=" + ways.size());
             boolean tooManyWays = ways.size() > maxWays;
             boolean tooManyBytes = out.length > maxSize;
@@ -1809,7 +1807,6 @@ public class CreateGpsMidData implements FilenameFilter {
         if ((tmpLat > Short.MAX_VALUE) || (tmpLat < Short.MIN_VALUE)) {
 
             // see https://sourceforge.net/tracker/index.php?func=detail&aid=3556775&group_id=192084&atid=939974 for details of how this relates to area outlines
-
             if (numNumericOverflowsLat < 100) {
                 System.err.println("WARNING: Numeric overflow of latitude, " + tmpLat + " for node: " + n.id + ", trying to handle");
             } else if (numNumericOverflowsLat == 100) {
@@ -1841,7 +1838,6 @@ public class CreateGpsMidData implements FilenameFilter {
 
         ds.writeShort((short) tmpLat);
         ds.writeShort((short) tmpLon);
-
 
         if ((flags & Constants.NODE_MASK_NAME) > 0) {
             if ((flags & Constants.NODE_MASK_NAMEHIGH) > 0) {

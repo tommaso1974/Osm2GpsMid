@@ -1,0 +1,5 @@
+Il seguente file, riporta le considerazioni sullo sviluppo di un clone di Osm2GpsMid,
+da valutare anche la versione per mobile
+
+Incominceremo ad analizzare, per grandi linee il processo di creazione del file
+con il suo contenuto in binario

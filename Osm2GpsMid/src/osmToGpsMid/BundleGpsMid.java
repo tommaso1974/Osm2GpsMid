@@ -698,6 +698,7 @@ public class BundleGpsMid implements Runnable {
             System.out.println("Removing unused nodes");
             new CleanUpData(parser, staticVariable.getConfig());
 
+            //TODO TOMMASO ......
             if (Configuration.attrToBoolean(staticVariable.getConfig().useRouting) >= 0) {
                 System.out.println("Creating route data");
                 System.out.println("===================");
@@ -737,6 +738,5 @@ public class BundleGpsMid implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

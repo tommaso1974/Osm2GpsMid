@@ -143,6 +143,7 @@ public class Tile {
 //			System.out.println("Start new Dict file");
 			// Write this containerTile as a FileTile. This container will be then 
 			// placed within this new FileTile. 
+                    //TODO TOMMASO scrivere in binario
 			if (zl != CreateGpsMidData.ROUTEZOOMLEVEL) {
 				ds.writeByte(TYPE_FILETILE);
 				ds.writeFloat(degToRad(bounds.minLat));

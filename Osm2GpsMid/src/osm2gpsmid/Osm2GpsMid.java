@@ -21,6 +21,7 @@ public class Osm2GpsMid {
      */
     public static void main(String[] args) {
 
+        //TODO TOMMASO........MAIN
         StaticVariable staticVariable = StaticVariable.getGetInstance();
         long maxMem = Runtime.getRuntime().maxMemory() / (1024 * 1024);
         String dataModel = System.getProperty("sun.arch.data.model");

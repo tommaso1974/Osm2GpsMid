@@ -67,7 +67,7 @@ public class Relations {
 
         HashMap<Long, Way> wayHashMap = parser.getWayHashMap();
         Map<Long, Node> nodeHashMap = parser.getNodeHashMap();
-        ArrayList<Way> removeWays = new ArrayList<Way>();
+        ArrayList<Way> removeWays = new ArrayList<>();
         Way firstWay = null;
         Iterator<Relation> i = parser.getRelations().iterator();
         rel:
@@ -255,7 +255,6 @@ public class Relations {
 
 //				System.out.println("Starting to handle multipolygon relation");
 //				System.out.println("  see http://www.openstreetmap.org/browse/relation/" + r.id);
-
                     if (r.getWayIds(Member.ROLE_OUTER).size() == 0) {
                         System.out.println("Relation has no outer member");
                         System.out.println("  see " + r.toUrl() + " I'll ignore this relation");

@@ -212,18 +212,20 @@ public class OpbfParser extends OsmParser {
                     if (i.getTypes(j) == Osmformat.Relation.MemberType.NODE) {
                         m = new Member("node", mid, role);
                         if (!nodes.containsKey(new Long(mid))) {
+                          //  System.out.println("Relation, sto estraendo il node -> " + mid);
                             r.setPartial();
                             continue;
                         }
                     } else if (i.getTypes(j) == Osmformat.Relation.MemberType.WAY) {
+                       // System.out.println("Relation, sto estraendo il way -> " + mid);
                         m = new Member("way", mid, role);
                         if (!ways.containsKey(new Long(mid))) {
                             r.setPartial();
                             continue;
                         }
                     } else if (i.getTypes(j) == Osmformat.Relation.MemberType.RELATION) {
+                       // System.out.println("Relation, sto estraendo il R -> " + mid);
                         m = new Member("relation", mid, role);
-                        ;
                         if (m.getRef() > r.id) {
                             // We haven't parsed this relation yet, so
                             // we have to assume it is valid for the moment
@@ -315,6 +317,7 @@ public class OpbfParser extends OsmParser {
         return "Osm Pbf";
     }
 
+    //TODO TOMMASO
     @Override
     protected void init(InputStream i) {
         try {
