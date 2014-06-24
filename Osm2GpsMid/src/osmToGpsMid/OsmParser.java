@@ -108,8 +108,7 @@ public abstract class OsmParser {
                 }
             }
         }
-        if ((bounds == null || bounds.size() == 0)
-                && configuration.getArea() == null) {
+        if ((bounds == null || bounds.size() == 0) && configuration.getArea() == null) {
             inBound = true;
         }
 
