@@ -56,13 +56,13 @@ public abstract class OsmParser {
      * Maps id to already read nodes. Key: Long Value: Node
      */
     //protected HashMap<Long, Node> nodes = new HashMap<Long, Node>(80000, 0.60f);
-    private Storage<Node> nodesStorage = new Storage<Node>(new NodeHash());
+    private Storage<Node> nodesStorage = new Storage<>(new NodeHash());
     protected Map<Long, Node> nodes = nodesStorage.foreignKey(new Id2EntityHash());
     protected Vector<Node> nodes2 = null;
-    protected HashMap<Long, Way> ways = new HashMap<Long, Way>();
-    protected HashMap<Long, Relation> relations = new HashMap<Long, Relation>();
-    protected HashMap<Long, TurnRestriction> turnRestrictions = new HashMap<Long, TurnRestriction>();
-    protected ArrayList<TurnRestriction> turnRestrictionsWithViaWays = new ArrayList<TurnRestriction>();
+    protected HashMap<Long, Way> ways = new HashMap<>();
+    protected HashMap<Long, Relation> relations = new HashMap<>();
+    protected HashMap<Long, TurnRestriction> turnRestrictions = new HashMap<>();
+    protected ArrayList<TurnRestriction> turnRestrictionsWithViaWays = new ArrayList<>();
     private Node[] delayingNodes;
     public int trafficSignalCount = 0;
     private Vector<Bounds> bounds = null;
@@ -120,18 +120,17 @@ public abstract class OsmParser {
      * @param viaNodeOrWayRef
      * @param turnRestriction
      */
-    public void addTurnRestriction(long viaNodeOrWayRef,
-            TurnRestriction turnRestriction) {
+    public void addTurnRestriction(long viaNodeOrWayRef, TurnRestriction turnRestriction) {
         if (!turnRestrictions.containsKey(new Long(viaNodeOrWayRef))) {
             turnRestrictions.put(new Long(viaNodeOrWayRef), turnRestriction);
             // System.out.println("Put turn restrictions at " +
             // viaNodeOrWayRef);
         } else {
-            TurnRestriction baseTurnRestriction = (TurnRestriction) turnRestrictions
-                    .get(new Long(viaNodeOrWayRef));
+            TurnRestriction baseTurnRestriction = (TurnRestriction) turnRestrictions.get(new Long(viaNodeOrWayRef));
             while (baseTurnRestriction.nextTurnRestrictionAtThisNode != null) {
                 baseTurnRestriction = baseTurnRestriction.nextTurnRestrictionAtThisNode;
             }
+            
             baseTurnRestriction.nextTurnRestrictionAtThisNode = turnRestriction;
             // System.out.println("Multiple turn restrictions at " +
             // viaNodeOrWayRef);
@@ -187,7 +186,7 @@ public abstract class OsmParser {
     }
 
     /**
-     * @param w
+     * @param n
      */
     public void addNode(Node n) {
         // polish.api.bigstyles
@@ -280,19 +279,19 @@ public abstract class OsmParser {
         //System.out.println("Free memory: " + Runtime.getRuntime().freeMemory());
         System.out.println("Resizing nodes HashMap");
         if (nodes == null) {
-            nodes2 = new Vector<Node>(nodes2);
+            nodes2 = new Vector<>(nodes2);
         } else {
             //nodes = new HashMap<Long, Node>(nodes);
             nodesStorage.shrink(0.85f);
         }
-        relations = new HashMap<Long, Relation>(relations);
+        relations = new HashMap<>(relations);
         //System.gc();
         //System.out.println("Free memory: " + Runtime.getRuntime().freeMemory());
         printMemoryUsage(1);
     }
 
     public void dropHashMap() {
-        nodes2 = new Vector<Node>(nodes.values());
+        nodes2 = new Vector<>(nodes.values());
         nodes = null;
     }
 
