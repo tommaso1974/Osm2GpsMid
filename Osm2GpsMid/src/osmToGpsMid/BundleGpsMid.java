@@ -711,7 +711,8 @@ public class BundleGpsMid implements Runnable {
             System.out.println("Removing unused nodes");
             new CleanUpData(parser, staticVariable.getConfig());
 
-            //TODO TOMMASO ......
+            //TODO TOMMASO ...... adesso abbiamo solamente i dati che ci interessano per poter effettuare
+            //tutti i calcoli del caso
             if (Configuration.attrToBoolean(staticVariable.getConfig().useRouting) >= 0) {
                 System.out.println("Creating route data");
                 System.out.println("===================");

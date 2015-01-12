@@ -153,6 +153,8 @@ public class CreateGpsMidData implements FilenameFilter {
     }
 
     /**
+     * TODO tommaso questo metodo permette di esportare le informazioni che sono state fino qui
+     * processate.....
      * Prepares and writes the complete map data.
      */
     public void exportMapToMid() {
