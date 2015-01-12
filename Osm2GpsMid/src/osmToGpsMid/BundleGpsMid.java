@@ -559,7 +559,13 @@ public class BundleGpsMid implements Runnable {
             System.out.println(staticVariable.getConfig().toString());
 
             // the legend must be parsed after the configuration to apply parameters to the travel modes specified in useRouting
+            //tommaso; qui andiamo a definire le tipologie di mezzi che si vogliono utilizzare per poter essettuare il percorso
+            //macchina, moto, a piedi
             TravelModes.stringToTravelModes(staticVariable.getConfig().useRouting);
+            
+            //tommaso; qui abbiamo memorizzato tutte le informazioni sulle legend da inserire eventulamente nella mappa
+            // nel nostro caso nn mi interessa, almeno per il momento, ma da tenere a mente quando andremo a raffinare 
+            //le varie logiche
             staticVariable.getConfig().parseLegend();
 
             // Maybe some of these should be configurable in the future.
@@ -590,6 +596,7 @@ public class BundleGpsMid implements Runnable {
                         System.out.println("Warning: No access restrictions in "
                                 + staticVariable.getConfig().getStyleFileName() + " for " + tm.getName());
                     }
+                    //toll = pedaggio
                     int tollRuleCount = 0;
                     if (TravelModes.getTravelMode(i).getTollRules().size() > 0) {
                         for (TollRule r : tm.getTollRules()) {
@@ -618,6 +625,7 @@ public class BundleGpsMid implements Runnable {
            // expand(staticVariable.getConfig(), tmpDir);
             File target = new File(tmpDir);
             createPath(target);
+            //se stiamo creando un file apk allora dobbiamo inserire ulteriori elementi
             if (staticVariable.getConfig().sourceIsApk) {
                 // create /assets
                 File targetAssets = new File(tmpDir + "/assets");
@@ -631,6 +639,11 @@ public class BundleGpsMid implements Runnable {
                 f.delete();
             }
 
+            //Tommaso, metodo che permette di parsare gli oggetti OSM, volendo po
+            // quando scriviamo la riga
+            //Nodes 1008000/6822, Ways 0/0, Relations 0/0/0
+            // vuol dire che degli n nodi fino adessi processati solamente 6822 sono presenti 
+            //al'interno dell'area di interesse
             OsmParser parser = staticVariable.getConfig().getPlanetParser();
 
             SeaGenerator2 sg2 = new SeaGenerator2();
