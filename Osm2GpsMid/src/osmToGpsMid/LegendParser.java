@@ -59,7 +59,7 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
     private Hashtable<String, Integer> maxSpeedTemplates;
     private Hashtable<String, Boolean> relationExpansions;
     private Hashtable<String, Boolean> relationExpansionsCombine;
-    private static final Vector<Damage> damages = new Vector<Damage>();
+    private static final Vector<Damage> damages = new Vector<>();
     private final byte READING_WAYS = 0;
     private final byte READING_POIS = 1;
     private final byte READING_ROUTEMODES = 3;
@@ -125,14 +125,14 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
 
     private void init(InputStream i) {
         try {
-            relevantKeys = new HashSet<String>();
+            relevantKeys = new HashSet<>();
             initSpecialcasedRelevantKeys();
-            poiMap = new Hashtable<String, Hashtable<String, Set<EntityDescription>>>();
-            pois = new LongTri<EntityDescription>();
+            poiMap = new Hashtable<>();
+            pois = new LongTri<>();
             currentPoi = new POIdescription();
-            maxSpeedTemplates = new Hashtable<String, Integer>();
-            relationExpansions = new Hashtable<String, Boolean>();
-            relationExpansionsCombine = new Hashtable<String, Boolean>();
+            maxSpeedTemplates = new Hashtable<>();
+            relationExpansions = new Hashtable<>();
+            relationExpansionsCombine = new Hashtable<>();
             /* Add a bogous POI description, to reserve type 0 as a special marker */
             // polish.api.bigstyles
             currentPoi.typeNum = (short) poiIdx++;
@@ -141,8 +141,8 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
             currentPoi.description = "No description";
             pois.put(currentPoi.typeNum, currentPoi);
 
-            wayMap = new Hashtable<String, Hashtable<String, Set<EntityDescription>>>();
-            ways = new LongTri<EntityDescription>();
+            wayMap = new Hashtable<>();
+            ways = new LongTri<>();
             currentWay = new WayDescription();
             /**
              * Add a bogous Way description, to reserve type 0 as a special
@@ -867,18 +867,18 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
                     if (currentTravelMode != null) {
                         currentTravelMode.getRouteAccessRestrictions().addElement(
                                 new RouteAccessRestriction(atts.getValue("restrictionKey"),
-                                atts.getValue("restrictionValues") + "|",
-                                Configuration.attrToBoolean(atts
-                                .getValue("restrictionPermit")) > 0));
+                                        atts.getValue("restrictionValues") + "|",
+                                        Configuration.attrToBoolean(atts
+                                                .getValue("restrictionPermit")) > 0));
                     }
                 }
                 if (qName.equals("tollRule")) {
                     if (currentTravelMode != null) {
                         currentTravelMode.getTollRules().addElement(
                                 new TollRule(atts.getValue("tollKey"),
-                                atts.getValue("tollValues") + "|",
-                                Configuration.attrToBoolean(atts.getValue("enableToll")) > 0,
-                                Configuration.attrToBoolean(atts.getValue("debugTollRule")) > 0));
+                                        atts.getValue("tollValues") + "|",
+                                        Configuration.attrToBoolean(atts.getValue("enableToll")) > 0,
+                                        Configuration.attrToBoolean(atts.getValue("debugTollRule")) > 0));
                     }
                 }
                 break;
@@ -902,7 +902,7 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
                     } catch (NumberFormatException nfe) {
                         System.out
                                 .println("level in tileScaleLevel must be integer, but was "
-                                + atts.getValue("level"));
+                                        + atts.getValue("level"));
                         nonValidStyleFile = true;
                     }
                     if (level >= 0 && level < 4) {
@@ -916,7 +916,7 @@ public class LegendParser extends DefaultHandler implements ErrorHandler {
                         } catch (NumberFormatException nfe) {
                             System.out
                                     .println("scale in tileScaleLevel must be integer, but was "
-                                    + atts.getValue("scale"));
+                                            + atts.getValue("scale"));
                             nonValidStyleFile = true;
                         }
                         String allowedForRoutableWays = atts.getValue("allowedForRoutableWays");

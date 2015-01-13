@@ -15,11 +15,12 @@ public class Name {
 
     private String name;
     private String canon;
-    private ArrayList<Entity> entitys = new ArrayList<Entity>(1);
+    private final ArrayList<Entity> entitys = new ArrayList<>(1);
     private int idx;
-    private boolean debug = false;
+    private final boolean debug;
 
     public Name(Entity e) {
+        this.debug = false;
         if (e.getName() == null) {
             throw new IllegalArgumentException("null name not allowed");
         }
@@ -33,6 +34,7 @@ public class Name {
      * @param name
      */
     public Name(String name) {
+        this.debug = false;
         setName(name);
     }
 

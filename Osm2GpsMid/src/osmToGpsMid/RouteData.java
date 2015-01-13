@@ -39,10 +39,10 @@ import osmToGpsMid.tools.FileTools;
  */
 public class RouteData {
 
-    private OsmParser parser;
+    private final OsmParser parser;
     private String path;
     private Configuration config;
-    public Map<Long, RouteNode> nodes = new HashMap<Long, RouteNode>();
+    public Map<Long, RouteNode> nodes = new HashMap<>();
 
     public RouteData(OsmParser parser, String path) {
         super();
@@ -50,27 +50,46 @@ public class RouteData {
         this.path = path;
     }
 
+    /*
+     Questo metodo effettue le seguenti operazioni:
+     1) Se stiamo creando un pacchetto per Android, andiamo a creare la cartella assets
+     2) Cicliamo su tutti i nodi che sono stati filtrati fino ad ora ed eseguiamo i seguenti steo:
+     2a) resetConnectedLineCount
+     */
     public void create(Configuration config) {
         if (config.sourceIsApk) {
             this.path = this.path + "/assets";
         }
         this.config = config;
         // reset connectedLineCount for each Node to 0
+        System.out.println("Il numero dei nodi da processare e' " + parser.getNodes().size());
         for (Node n : parser.getNodes()) {
             n.resetConnectedLineCount();
         }
 
         boolean neverTrafficSignalsRouteNode = false;
         // count all connections for all nodes
+        System.out.println("Il numero dei way da processare e' " + parser.getWays().size());
         for (Way w : parser.getWays()) {
+            System.out.println("Sto processando la way " + w.getId());
+            // System.out.println("Sto processando la way " + w.getName());
             if (!w.isAccessForAnyRouting()) {
+                //Tommaso se stiamo qui way che stiam processando non risulta essere una strada
+                System.out.println("Saltiamo il processamento");
                 continue;
             }
 
+            //Tommaso, se stiam qui la way che stiamo processando risulta essere una strada
+            System.out.println("Continuaimo il processamento");
             // mark nodes in tunnels / on bridges / on motorways to not get later marked as traffic signal delay route node by nearby traffic signals
             WayDescription wayDesc = config.getWayDesc(w.type);
-            neverTrafficSignalsRouteNode = (w.isBridge() || w.isTunnel() || (wayDesc.isMotorway() && !wayDesc.isHighwayLink()));
 
+            // Tommaso, in tutte questi tipologie di elementi non troveremo mai un trafficSignals
+            neverTrafficSignalsRouteNode = (w.isBridge() || w.isTunnel() || (wayDesc.isMotorway() && !wayDesc.isHighwayLink()));
+            System.out.println("WayDescription " + wayDesc.description);
+
+            // Tommaso Adesso processiamo, per ogni via i nodi che compongono la way
+            System.out.println("Il numero di nodi per la way e' " + w.getNodeCount());
             Node lastNode = null;
             for (Node n : w.getNodes()) {
                 n.incConnectedLineCount();
@@ -89,9 +108,14 @@ public class RouteData {
         }
 
         for (Way w : parser.getWays()) {
+            System.out.println("Stiamo processando le way " + w.getId() + " per creare i modelli di routing");
+            //tommaso Saltiamo tutti gli elementi che non sono way effettivie ma sono palazzi/costruzioni
+            //cosa che avevamo fatto già prima 
             if (!w.isAccessForAnyRouting()) {
                 continue;
             }
+
+            //Tommaso A questo punto vado a costruire le varie connessioni
             addConnections(w.getNodes(), w);
 
         }
@@ -109,6 +133,10 @@ public class RouteData {
         System.out.println("info: Calculating turn restrictions");
         int numTurnRestrictions = 0;
         for (RouteNode n : nodes.values()) {
+            //Tommaso teniamo conto che le restrizioni alla viabilità risultano essere memorizzati all'interno
+            //delle relazioni, per cui troveremo una struttura così fatta:
+            //Key=type e Value=restriction
+            //Key=restriction 	Value=only_right_turn
             TurnRestriction turn = (TurnRestriction) parser.getTurnRestrictionHashMap().get(new Long(n.node.id));
             while (turn != null) {
                 Way restrictionFromWay = parser.getWayHashMap().get(new Long(turn.fromWayRef));
@@ -461,7 +489,6 @@ public class RouteData {
                     }
                 }
 
-
                 TravelMode tm = TravelModes.getTravelMode(i);
                 if (w.isExplicitArea()) {
                     tm.numAreaCrossConnections++;
@@ -732,7 +759,6 @@ public class RouteData {
                 fo.write("</way>\n");
             }
         }
-
 
 //		RouteNode last = null;
 //		Connection lastCon = null;

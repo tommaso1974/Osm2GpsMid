@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
-import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
@@ -547,7 +546,7 @@ public class Configuration {
     public static Configuration getConfiguration() {
         return conf;
     }
-    
+
     public Configuration(String[] args) {
         try {
             //Set singleton
@@ -761,10 +760,10 @@ public class Configuration {
         usePhoneTags = fileReader.usePhoneTags();
         useHouseNumbers = fileReader.useHouseNumbers();
         useWordSearch = fileReader.useWordSearch();
-        
+
         String routingSize = getString("routing.maxTileSize");
-        if(routingSize != null && !routingSize.isEmpty()){
-            maxRouteTileSize = Integer.parseInt(routingSize); 
+        if (routingSize != null && !routingSize.isEmpty()) {
+            maxRouteTileSize = Integer.parseInt(routingSize);
         }
 
         setIcons(fileReader.useIcons());
@@ -773,18 +772,21 @@ public class Configuration {
             System.exit(1);
         }
 
-        if(fileReader.addToManifest() != null)
+        if (fileReader.addToManifest() != null) {
             setAddToManifest(fileReader.addToManifest());
-        
-        if(fileReader.soundsSourceFilesType() != null)
+        }
+
+        if (fileReader.soundsSourceFilesType() != null) {
             setSounds(fileReader.soundsSourceFilesType());
+        }
 
         // don't override map source set by command line with one from .properties
         // also don't override one set by GUI with an empty one from properties
         String mapSource = fileReader.mapSource();
         if ((planet == null || planet.equals(""))) {
-            if(mapSource != null && !mapSource.isEmpty())
+            if (mapSource != null && !mapSource.isEmpty()) {
                 setPlanetName(mapSource);
+            }
         }
 
         useSoundFiles = fileReader.useSoundFilesWithSyntax();
@@ -792,9 +794,10 @@ public class Configuration {
         // don't override cell source set by command line with one from .properties
         // also don't override one set by GUI with an empty one from properties
         if ((cellSource == null || cellSource.equals(""))) {
-            
-            if(getString("cellSource") != null && !getString("cellSource").isEmpty())
+
+            if (getString("cellSource") != null && !getString("cellSource").isEmpty()) {
                 setCellSource(getString("cellSource"));
+            }
         }
 
         setDontCompress(fileReader.dontCompressLowerCase());
@@ -807,16 +810,18 @@ public class Configuration {
                 maxTileSize = Integer.parseInt(getString("maxTileSize"));
             }
         }
-        
-        if(getString("maxDictDepth") != null && !getString("maxDictDepth").isEmpty())
+
+        if (getString("maxDictDepth") != null && !getString("maxDictDepth").isEmpty()) {
             maxDictDepth = Integer.parseInt(getString("maxDictDepth"));
-        
-        if(getString("mapPrecisionInMeters") != null && !getString("mapPrecisionInMeters").isEmpty())
+        }
+
+        if (getString("mapPrecisionInMeters") != null && !getString("mapPrecisionInMeters").isEmpty()) {
             mapPrecisionInMeters = Double.parseDouble(getString("mapPrecisionInMeters"));
+        }
 
         for (int i = 0; i <= 3; i++) {
-            
-            if(getString("maxTileWays" + i) != null && !getString("maxTileWays" + i).isEmpty()){
+
+            if (getString("maxTileWays" + i) != null && !getString("maxTileWays" + i).isEmpty()) {
                 maxTileWays[i] = Integer.parseInt(getString("maxTileWays" + i));
             }
         }
@@ -905,10 +910,8 @@ public class Configuration {
             rb = new PropertyResourceBundle(propIS);
         }
 
-
         // URL propertiesAddress = getClass().getResource("/version.properties");
         //vb = new PropertyResourceBundle(propertiesAddress.openStream());
-
         readBounds();
         readRouteList();
 
@@ -1119,7 +1122,7 @@ public class Configuration {
             return vb.getString(key).trim();
         } catch (Exception e1) {
             //e1.printStackTrace();
-           // return null;
+            // return null;
             return "";
         }
     }
@@ -1359,10 +1362,10 @@ public class Configuration {
         return getTempBaseDir() + "/" + "map";
     }
 
-    public String getOsmBaseDir(){
+    public String getOsmBaseDir() {
         return OsmCommonUtils.getBaseFolder();
     }
-    
+
     public String getTempBaseDir() {
         return getOsmBaseDir();
     }
@@ -1587,7 +1590,6 @@ public class Configuration {
         } catch (RuntimeException e) {
         }
 
-
         if (i > 0) {
             System.out.println("Found " + i + " route destinations");
             for (int l = 0; l < i; l++) {
@@ -1611,7 +1613,6 @@ public class Configuration {
         return bounds;
     }
 
-    
     /**
      * Reads bounds from the current properties file (defined by 'rb') or,
      * theoretically from version.properties, but this doesn't contain any
@@ -1622,18 +1623,18 @@ public class Configuration {
         bounds.removeAllElements();
 
         Bounds bound = new Bounds();
-        
+
         float minLat = fileReader.minLatFloat();
         float maxLat = fileReader.maxLatFloat();
         float minLon = fileReader.minLonFloat();
         float maxLon = fileReader.maxLonFloat();
-        
+
         bound.extend(minLat, minLon);
         bound.extend(maxLat, maxLon);
-        
+
         bounds.add(bound);
     }
-    
+
     /**
      * Reads bounds from the current properties file (defined by 'rb') or,
      * theoretically from version.properties, but this doesn't contain any
@@ -1701,15 +1702,16 @@ public class Configuration {
     }
 
     public void setAddToManifest(String line) {
-        if(line != null)
+        if (line != null) {
             addToManifest = line.trim();
+        }
     }
 
     public String getAddToManifest() {
         return addToManifest;
     }
 
-    public void setSounds(String sounds) {        
+    public void setSounds(String sounds) {
         if (attrToBoolean(sounds) > 0) {
             useSounds = "amr";
         } else if (attrToBoolean(sounds) < 0) {
@@ -1941,7 +1943,7 @@ public class Configuration {
     }
 
     /**
-     * @param a
+     * @param area
      */
     public void setArea(Area area) {
         this.area = area;

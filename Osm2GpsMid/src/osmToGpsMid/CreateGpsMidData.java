@@ -123,7 +123,7 @@ public class CreateGpsMidData implements FilenameFilter {
     private static int dictFilesWritten = 0;
     private static int tileFilesWritten = 0;
     private RouteData rd;
-    private static double MAX_RAD_RANGE = (Short.MAX_VALUE - Short.MIN_VALUE - 2000) / MyMath.FIXPT_MULT;
+    private static final double MAX_RAD_RANGE = (Short.MAX_VALUE - Short.MIN_VALUE - 2000) / MyMath.FIXPT_MULT;
     private String[] useLang = null;
     private int numNumericOverflowsLat = 0;
     private int numNumericOverflowsLon = 0;
@@ -153,9 +153,8 @@ public class CreateGpsMidData implements FilenameFilter {
     }
 
     /**
-     * TODO tommaso questo metodo permette di esportare le informazioni che sono state fino qui
-     * processate.....
-     * Prepares and writes the complete map data.
+     * TODO tommaso questo metodo permette di esportare le informazioni che sono
+     * state fino qui processate..... Prepares and writes the complete map data.
      */
     public void exportMapToMid() {
         names1 = getNames1();
@@ -697,7 +696,7 @@ public class CreateGpsMidData implements FilenameFilter {
                 sbCopiedMedias.append("  referenced in " + configuration.getStyleFileName() + " have been:\r\n");
                 sbCopiedMedias.append("    "
                         + (configuration.getStyleFileDirectory().length() == 0
-                        ? "Current directory" : configuration.getStyleFileDirectory())
+                                ? "Current directory" : configuration.getStyleFileDirectory())
                         + " and its png and " + configuration.getSoundFiles() + " subdirectories");
                 System.out.println(sbCopiedMedias.toString());
                 if (mediaInclusionErrors != 0) {

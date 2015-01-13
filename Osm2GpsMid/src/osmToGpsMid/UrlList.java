@@ -14,13 +14,6 @@ import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import osmToGpsMid.model.Entity;
-import osmToGpsMid.model.Node;
-import osmToGpsMid.model.Way;
-import osmToGpsMid.model.name.Name;
-import osmToGpsMid.model.name.Names;
 import osmToGpsMid.model.url.Url;
 import osmToGpsMid.model.url.Urls;
 

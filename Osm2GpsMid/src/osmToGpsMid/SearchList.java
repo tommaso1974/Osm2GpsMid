@@ -17,14 +17,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import osmToGpsMid.model.Bounds;
 import osmToGpsMid.model.Entity;
 import osmToGpsMid.model.Node;
 import osmToGpsMid.model.Way;
 import osmToGpsMid.model.name.Name;
 import osmToGpsMid.model.name.Names;
 import osmToGpsMid.model.name.WayRedirect;
-import osmToGpsMid.model.url.Url;
 import osmToGpsMid.model.url.Urls;
 import osmToGpsMid.tools.FileTools;
 

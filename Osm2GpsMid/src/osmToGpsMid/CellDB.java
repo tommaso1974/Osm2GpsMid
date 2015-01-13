@@ -50,7 +50,7 @@ public class CellDB {
     }
 
     public void parseCellDB() {
-        HashMap<Long, ArrayList<Cell>> cells = new HashMap<Long, ArrayList<Cell>>();
+        HashMap<Long, ArrayList<Cell>> cells = new HashMap<>();
         int noInvalid = 0;
         int noValid = 0;
         int mcc = 0;

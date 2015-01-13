@@ -129,7 +129,7 @@ public abstract class OsmParser {
             while (baseTurnRestriction.nextTurnRestrictionAtThisNode != null) {
                 baseTurnRestriction = baseTurnRestriction.nextTurnRestrictionAtThisNode;
             }
-            
+
             baseTurnRestriction.nextTurnRestrictionAtThisNode = turnRestriction;
             // System.out.println("Multiple turn restrictions at " +
             // viaNodeOrWayRef);

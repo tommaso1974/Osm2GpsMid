@@ -19,7 +19,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ProcessBuilder;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -32,8 +31,6 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import osm2gpsmid.StaticVariable;
 
 import osmToGpsMid.area.Area;
@@ -712,11 +709,12 @@ public class BundleGpsMid implements Runnable {
             new CleanUpData(parser, staticVariable.getConfig());
 
             //TODO TOMMASO ...... adesso abbiamo solamente i dati che ci interessano per poter effettuare
-            //tutti i calcoli del caso
+            //tutti i calcoli del caso, effettuiamo tutte le operazioni di routing sui dati
             if (Configuration.attrToBoolean(staticVariable.getConfig().useRouting) >= 0) {
                 System.out.println("Creating route data");
                 System.out.println("===================");
                 rd.create(staticVariable.getConfig());
+                //Questo non fa nulla
                 rd.optimise();
                 OsmParser.printMemoryUsage(1);
             }
