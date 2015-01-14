@@ -85,6 +85,8 @@ public class RouteData {
             WayDescription wayDesc = config.getWayDesc(w.type);
 
             // Tommaso, in tutte questi tipologie di elementi non troveremo mai un trafficSignals
+            // la condizione perchè non sia presente una lanterna semaforica e' la seguente:
+            // se è un ponte, se è un tunnel e se ( se non è uno svincolo ma e' una strada ad alto scorrimento [autostrada])
             neverTrafficSignalsRouteNode = (w.isBridge() || w.isTunnel() || (wayDesc.isMotorway() && !wayDesc.isHighwayLink()));
             System.out.println("WayDescription " + wayDesc.description);
 
@@ -168,8 +170,9 @@ public class RouteData {
                 //System.out.println(turn.toString(parser.getWayHashMap()));
                 int numFromConnections = 0;
                 long lastId = -1;
-                for (Connection c : nViaFrom.getConnectedFrom()) { // TODO: Strange: there are sometimes multiple connections connecting to the same node, filter those out by checking lastId 
-					/* [ gpsmid-Bugs-3159017 ] Can't parse turn restriction 
+                for (Connection c : nViaFrom.getConnectedFrom()) { 
+                    // TODO: Strange: there are sometimes multiple connections connecting to the same node, filter those out by checking lastId 
+		    /* [ gpsmid-Bugs-3159017 ] Can't parse turn restriction 
                      * rather than only checking if the restrictionFromWay contains the from node
                      * compare the travel length on the way between from node and via node
                      * with the connection length to make more sure this is the right connection

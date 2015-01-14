@@ -329,5 +329,9 @@ public class Node extends Entity {
         }
         return true;
     }
+    
+    public long getNodeId(){
+        return id;
+    }
 
 }

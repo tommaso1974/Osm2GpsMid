@@ -299,7 +299,6 @@ public class GuiConfigWizard extends JFrame implements Runnable, ActionListener,
         gbc.gridy = 0;
         add(map, gbc);
 
-
         JPanel jpRouteCorridor = new JPanel(new GridBagLayout());
         gbc.gridx = 8;
         gbc.gridy = 0;
@@ -334,7 +333,6 @@ public class GuiConfigWizard extends JFrame implements Runnable, ActionListener,
         gbc.gridx = 0;
         gbc.gridy = 2;
         jpRouteCorridor.add(destList, gbc);
-
 
         jbClearRoute = new JButton("Clear Route Corridor");
         jbClearRoute.setActionCommand("ClearRoute-click");
@@ -517,7 +515,6 @@ public class GuiConfigWizard extends JFrame implements Runnable, ActionListener,
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         jpOptions.add(jcbTileSize, gbc);
-
 
         JPanel jpOptions2 = new JPanel(new GridBagLayout());
         gbc.gridx = 6;
@@ -1270,7 +1267,6 @@ public class GuiConfigWizard extends JFrame implements Runnable, ActionListener,
             fw.write("#  Possible values: false|small|true|big|large|huge, true is the default medium size\r\n");
             fw.write("useIcons = " + config.getUseIcons() + "\r\n");
             fw.write("\r\n");
-
 
             if (!"".equals(config.getCellSource())) {
                 // quote possible backslashes

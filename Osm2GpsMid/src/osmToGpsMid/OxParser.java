@@ -200,7 +200,7 @@ public class OxParser extends OsmParser {
                 nodeIns++;
                 if (current.getAttribute("highway") != null
                         && current.getAttribute("highway").equalsIgnoreCase(
-                        "traffic_signals")) {
+                                "traffic_signals")) {
                     // decrement trafficSignalCount if a previous node with this
                     // id got replaced but was a traffic signal node
                     if (previousNodeWithThisId != null

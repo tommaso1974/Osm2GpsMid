@@ -89,7 +89,7 @@ public class OpbfParser extends OsmParser {
                     nodeIns++;
                     if (nd.getAttribute("highway") != null
                             && nd.getAttribute("highway").equalsIgnoreCase(
-                            "traffic_signals")) {
+                                    "traffic_signals")) {
                         // decrement trafficSignalCount if a previous node with this
                         // id got replaced but was a traffic signal node
                         if (previousNodeWithThisId != null
@@ -212,19 +212,19 @@ public class OpbfParser extends OsmParser {
                     if (i.getTypes(j) == Osmformat.Relation.MemberType.NODE) {
                         m = new Member("node", mid, role);
                         if (!nodes.containsKey(new Long(mid))) {
-                          //  System.out.println("Relation, sto estraendo il node -> " + mid);
+                            //  System.out.println("Relation, sto estraendo il node -> " + mid);
                             r.setPartial();
                             continue;
                         }
                     } else if (i.getTypes(j) == Osmformat.Relation.MemberType.WAY) {
-                       // System.out.println("Relation, sto estraendo il way -> " + mid);
+                        // System.out.println("Relation, sto estraendo il way -> " + mid);
                         m = new Member("way", mid, role);
                         if (!ways.containsKey(new Long(mid))) {
                             r.setPartial();
                             continue;
                         }
                     } else if (i.getTypes(j) == Osmformat.Relation.MemberType.RELATION) {
-                       // System.out.println("Relation, sto estraendo il R -> " + mid);
+                        // System.out.println("Relation, sto estraendo il R -> " + mid);
                         m = new Member("relation", mid, role);
                         if (m.getRef() > r.id) {
                             // We haven't parsed this relation yet, so

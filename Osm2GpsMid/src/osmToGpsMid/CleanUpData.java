@@ -198,7 +198,7 @@ public class CleanUpData {
                 n.used = true;
             }
         }
-        ArrayList<Node> rmNodes = new ArrayList<Node>();
+        ArrayList<Node> rmNodes = new ArrayList<>();
         for (Node n : parser.getNodes()) {
             if (n.used == false) {
                 rmNodes.add(n);

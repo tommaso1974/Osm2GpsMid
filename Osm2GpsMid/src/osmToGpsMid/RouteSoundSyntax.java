@@ -125,7 +125,6 @@ public class RouteSoundSyntax {
                 }
             }
 
-
             getAndWriteString("soon.sound");
             getAndWriteString("again.sound");
             getAndWriteString("meters.sound");

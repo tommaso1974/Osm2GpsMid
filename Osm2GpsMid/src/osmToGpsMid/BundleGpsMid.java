@@ -51,14 +51,10 @@ public class BundleGpsMid implements Runnable {
 
     static Calendar startTime;
 
-    
-    
    // static boolean compressed = true;
-    
    // static Configuration config;
 //    static String dontCompress[] = null;
     //private static volatile boolean createSuccessfully;
-
 //    /**
 //     * @param args
 //     */
@@ -133,16 +129,15 @@ public class BundleGpsMid implements Runnable {
 //            gcw.reenableClose();
 //        }
 //    }
-
     private static void expand(Configuration c, String tmpDir) throws ZipException, IOException {
-        
-        System.out.println("Preparing " + c.getOsmBaseDir()  + c.getJarFileName());
+
+        System.out.println("Preparing " + c.getOsmBaseDir() + c.getJarFileName());
         File myfile = new File(c.getOsmBaseDir() + c.getJarFileName());
-        
-        if(!myfile.exists()){
+
+        if (!myfile.exists()) {
             myfile.createNewFile();
         }
-        
+
         FileInputStream fis = new FileInputStream(myfile);
         //FileInputStream fis = new FileInputStream(new File(c.getJarFile());
         InputStream appStream = fis;
@@ -263,7 +258,7 @@ public class BundleGpsMid implements Runnable {
                     line += nextline.substring(1);
                     continue;
                 }
-                
+
                 if (line.startsWith("MIDlet") || line.startsWith("MicroEdition") || (StaticVariable.getGetInstance().getConfig().getAddToManifest().length() != 0 && line.startsWith(StaticVariable.getGetInstance().getConfig().getAddToManifest()))) {
                     fw.write(line + "\n");
                 }
@@ -283,7 +278,7 @@ public class BundleGpsMid implements Runnable {
     }
 
     private static void pack(Configuration c) throws ZipException, IOException {
-        File n = null;  
+        File n = null;
         if (StaticVariable.getGetInstance().getConfig().getMapName().equals("")) {
             n = new File(c.getMidletFileName() + (StaticVariable.getGetInstance().getConfig().sourceIsApk ? ".apk" : ".jar"));
             rewriteManifestFile(c, true);
@@ -371,9 +366,9 @@ public class BundleGpsMid implements Runnable {
         }
         // System.out.println("Bundlename: " + bundleName + " jarSigner: " + jarSigner);
 /*
-        if (StaticVariable.getGetInstance().getConfig().getMapName().equals("") && !StaticVariable.getGetInstance().getConfig().sourceIsApk) {
-            writeJADfile(c, n.length());
-        }*/
+         if (StaticVariable.getGetInstance().getConfig().getMapName().equals("") && !StaticVariable.getGetInstance().getConfig().sourceIsApk) {
+         writeJADfile(c, n.length());
+         }*/
         Calendar endTime = Calendar.getInstance();
         System.out.println(n.getName() + " created successfully with " + (n.length() / 1024 / 1024) + " MiB in "
                 + getDuration(endTime.getTimeInMillis() - startTime.getTimeInMillis()));
@@ -495,8 +490,8 @@ public class BundleGpsMid implements Runnable {
     }
 
     /**
-     * Ensures that the path denoted with
-     * <code>f</code> will exist on the file-system.
+     * Ensures that the path denoted with <code>f</code> will exist on the
+     * file-system.
      *
      * @param f File whose directory must exist
      */
@@ -559,7 +554,7 @@ public class BundleGpsMid implements Runnable {
             //tommaso; qui andiamo a definire le tipologie di mezzi che si vogliono utilizzare per poter essettuare il percorso
             //macchina, moto, a piedi
             TravelModes.stringToTravelModes(staticVariable.getConfig().useRouting);
-            
+
             //tommaso; qui abbiamo memorizzato tutte le informazioni sulle legend da inserire eventulamente nella mappa
             // nel nostro caso nn mi interessa, almeno per il momento, ma da tenere a mente quando andremo a raffinare 
             //le varie logiche
@@ -619,7 +614,7 @@ public class BundleGpsMid implements Runnable {
             }
             String tmpDir = staticVariable.getConfig().getTempDir();
             System.out.println("Unpacking application to " + tmpDir);
-           // expand(staticVariable.getConfig(), tmpDir);
+            // expand(staticVariable.getConfig(), tmpDir);
             File target = new File(tmpDir);
             createPath(target);
             //se stiamo creando un file apk allora dobbiamo inserire ulteriori elementi
@@ -658,6 +653,9 @@ public class BundleGpsMid implements Runnable {
             System.out.println("Starting relation handling");
             startTime = System.currentTimeMillis();
             Area.setParser(parser);
+            //questo metodo permette di escludere dalla relation tutti quegli elementi
+            //che non soddisfano i criteri di routing, per esempio la relation
+            //fa rifermento al routing da parte di un autobus
             new Relations(parser, staticVariable.getConfig());
             System.out.println("Relations processed");
             time = (System.currentTimeMillis() - startTime);
@@ -691,7 +689,9 @@ public class BundleGpsMid implements Runnable {
             System.out.println("Splitting long ways");
             int numWays = parser.getWays().size();
             startTime = System.currentTimeMillis();
+            //todo Tommaso, metodo che mi permette di effettuare lo split di vie estremamente lungo
             new SplitLongWays(parser);
+            
             time = (System.currentTimeMillis() - startTime);
             System.out.println("Splitting long ways increased ways from "
                     + numWays + " to " + parser.getWays().size());
@@ -742,7 +742,7 @@ public class BundleGpsMid implements Runnable {
             if (staticVariable.getConfig().cleanupTmpDirAfterUse()) {
                 File tmpBaseDir = new File(staticVariable.getConfig().getTempBaseDir());
                 System.out.println("Cleaning up temporary directory " + tmpBaseDir);
-               // deleteDirectory(tmpBaseDir);
+                // deleteDirectory(tmpBaseDir);
             }
 
             staticVariable.setCreateSuccessfully(true);

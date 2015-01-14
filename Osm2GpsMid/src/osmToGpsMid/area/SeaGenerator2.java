@@ -59,6 +59,7 @@ public class SeaGenerator2 {
     /**
      * Set various options for generating sea areas
      *
+     * @param conf
      * @param aGenerateSea Generate sea areas at all
      * @param aGenerateSeaUsingMP Use multi polygons for the sea areas
      * @param aAllowSeaSectors Allow to create new ways for the sea area, this
@@ -83,7 +84,7 @@ public class SeaGenerator2 {
 
         // remember coastlines and add them to landways
         String natural;
-        ArrayList<Way> landWays = new ArrayList<Way>();
+        ArrayList<Way> landWays = new ArrayList<>();
         for (Way w : parser.getWays()) {
             natural = w.getAttribute("natural");
             if (natural != null) {

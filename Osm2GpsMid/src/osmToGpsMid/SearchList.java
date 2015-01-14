@@ -61,7 +61,7 @@ public class SearchList {
             FileTools.createPath(new File(path + "/search"));
             for (Name mapName : ((listType == INDEX_NAME || listType == INDEX_BIGNAME) ? names.getCanons()
                     : (listType == INDEX_WORD ? names.getWordCanons()
-                    : (listType == INDEX_WHOLEWORD ? names.getWholeWordCanons() : names.getHouseNumberCanons())))) {
+                            : (listType == INDEX_WHOLEWORD ? names.getWholeWordCanons() : names.getHouseNumberCanons())))) {
                 String string = mapName.getCanonFileName(mapName.getCanonFileId());
                 int eq = names.getEqualCount(string, lastStr);
                 if (!lastFid.equals(mapName.getCanonFileId())) {
@@ -71,9 +71,9 @@ public class SearchList {
                     lastFid = mapName.getCanonFileId();
                     String fileName = path
                             + (listType == INDEX_BIGNAME ? "/search/n"
-                            : (listType == INDEX_NAME ? "/search/s"
-                            : (listType == INDEX_WORD ? "/search/w"
-                            : (listType == INDEX_WHOLEWORD ? "/search/ww" : "/search/h"))))
+                                    : (listType == INDEX_NAME ? "/search/s"
+                                            : (listType == INDEX_WORD ? "/search/w"
+                                                    : (listType == INDEX_WHOLEWORD ? "/search/ww" : "/search/h"))))
                             + lastFid + ".d";
                     //System.out.println("open " + fileName);
                     fo = new FileOutputStream(fileName);

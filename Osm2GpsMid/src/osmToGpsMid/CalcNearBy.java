@@ -287,11 +287,18 @@ public class CalcNearBy {
         long startTime = System.currentTimeMillis();
         int count = 0;
         int ignoreCount = 0;
+        //La singola riga dell'hashmap è fatta in questa maniera 
+        //[ 0] = (HashMap$Entry) "47358144 => id=47358144 near id=240109189 (52.517036|13.38886) (city) name=Berlin near Berlin type=111 [building=yes is_in=Berlin ]"	
+        // in cui il near id rappresenta il nodo del singolo quartiere
         HashMap<Long, Way> wayHashMap = parser.getWayHashMap();
         for (Node n : parser.getNodes()) {
             if (n.hasHouseNumberTag()) {
+                //TODO Tommaso, prendendo un nodo, che ha il numero civico, andiamo a verificare quale sia la strada
+                //più vicina; per fare questo possiamo utilizzare il calcolo mediante l'oggetto KDTREE per creare uno spazio
+                //tridimensionale in cui effettuare la ricerca
+                System.out.println("Stiamo processando il nodo " + n.getNodeId() + " perchè presenta un numero civico");
                 long way = calcWayForHouseNumber((Entity) n, wayHashMap);
-                //System.out.println ("Got id " + way + " for housenumber node " + n);
+                System.out.println("Got id " + way + " for housenumber node " + n);
                 if (way != 0 && !n.containsKey("__wayid")) {
                     count++;
                     n.setAttribute("__wayid", Long.toString(way));
@@ -405,7 +412,9 @@ public class CalcNearBy {
         KDTree kd = new KDTree(3);
         //double [] latlonKey = new double[2]; 
         for (Node n : parser.getNodes()) {
+            System.out.println("Stiamo processando il nodo: " + n.getNodeId());
             if (n.isPlace()) {
+                // Tommaso, andiamo a verificare se nodo presenta il tag place
                 //latlonKey[0] = n.lat;
                 //latlonKey[1] = n.lon;
                 if (n.getName() == null || n.getName().trim().length() == 0) {
@@ -414,6 +423,7 @@ public class CalcNearBy {
                     continue;
                 }
                 try {
+                    // inseriemo la posizione, trasformata del punto, comprensivo dell'altezza
                     kd.insert(MyMath.latlon2XYZ(n), n);
                     kdSize++;
                 } catch (KeySizeException e) {
@@ -435,6 +445,7 @@ public class CalcNearBy {
         KDTree kd = new KDTree(3);
         //double [] latlonKey = new double[2]; 
         for (Way w : parser.getWays()) {
+            System.out.println("stiamo processando le way " + w.getId() + " da inserire all'interno di un KDtree");
             if (w.isHighway() /*&& w.getIsIn() == null */) {
                 if (w.getName() == null || w.getName().trim().length() == 0) {
                     continue;
