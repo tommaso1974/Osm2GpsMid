@@ -1,0 +1,39 @@
+Il seguente documento riporta gli step per poter generare i bundle con le varie mappe per poter costruire il proprio navigatore custom.
+L'idea è quella di analizzare il codice di GpsMid per poter capire quali siano i vari processi che debbono essere applicati ai dati OSM
+per poter essere inseriti in un navigatore satellitare.
+
+1) Caricare i dati all'interno di DB per poter gestire aree anche molto grandi, cosa che gpsMid non fà
+visto che il suo punto di forza è quello di andare a processare l'intero file in memoria, riducendo sensibilmente i tempi di 
+processamento ma limitando notevolmente la mole di dati che si possono elaborare.
+Dobbiamo creare le seguenti tabelle:
+
+Node
+NodeDetails
+way
+wayDetails
+Relation
+RelationDetails
+NodeRtree [ per poter effettuare le query spaziali ]
+
+come al solito il db che si è deciso di utilizzare risulta essere sqlite, in maniera da creare dei dd portabili
+
+Ho deciso, come prima cosa, di andare a processare i file protocol buffer, in maniera tale d'avere una mole dei dati molto ma molto più piccola rispetto al corrispettivo file xml.
+
+Anche in questo caso, la gestione delle tabelle RTREE deve avvenire ingestionando un milione di record, dopo di che si deve creare una nuova
+tabella, con un opportuno progressivo e continuare su quella.
+In questa maniera possiamo avere delle ottime performance in caricamento.
+Verificare se la medesima tecnica la si possa utilizzare anche per le altre tabelle, soprattutto la nodeDetails, l'Italia ha 90 milioni di Nodi, la details potrebbe avere, potenzialmente da 2 a 7 record per nodo, per cui potremmo arrivare a 27 milioni di records.
+La creazione di indici in questa tabella risulta essere un grossissimo problema.
+
+
+2) Una volta caricati i dati possiamo avere due opzioni
+ 	a) processare un'area geografica ben definita
+	b) processare tutta la mappa
+
+Il secondo caso è un'estenzione del primo, visto che tutta la mappa verrà creata suddividendola in "n" regioni e sulla base di quello andremo a salvare il tutto all'interno dei corrispettivi files [ vedere come si generano i singoli file/cartelle ]
+
+A prescindere dall'approccio utilizzato, gli step che dobbiamo effettuare sono i seguenti:
+
+3) Andare a creare una tabella temporanea che permetta di appoggiare i files/cartelle prima di comprimerle
+
+
