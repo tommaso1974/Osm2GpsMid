@@ -57,8 +57,8 @@ public class Area {
     }
 
     public void clean() {
-        outlineList = new ArrayList<Outline>();
-        holeList = new ArrayList<Outline>();
+        outlineList = new ArrayList<>();
+        holeList = new ArrayList<>();
         // tri = new ArrayList<Triangle>();
         outline = new Outline();
     }
@@ -72,7 +72,7 @@ public class Area {
             }
         }
         // if there are more ways than one are used to build the outline, try to construct one outline for that
-        ArrayList<Outline> outlineTempList = new ArrayList<Outline>();
+        ArrayList<Outline> outlineTempList = new ArrayList<>();
         while (outlineList.size() > 0) {
             outline = outlineList.get(0);
             if (!outline.isClosed()) {
@@ -85,7 +85,7 @@ public class Area {
         }
         outlineList = outlineTempList;
         // the same for the holes
-        outlineTempList = new ArrayList<Outline>();
+        outlineTempList = new ArrayList<>();
         //System.err.println("Starting to connect part ways");
         while (holeList.size() > 0) {
             outline = holeList.get(0);
@@ -101,7 +101,7 @@ public class Area {
         holeList = outlineTempList;
 
         int dir = 0;
-        ArrayList<Triangle> ret = new ArrayList<Triangle>(1);
+        ArrayList<Triangle> ret = new ArrayList<>(1);
         triangleList = ret;
         repaint();
         int loop = 0;

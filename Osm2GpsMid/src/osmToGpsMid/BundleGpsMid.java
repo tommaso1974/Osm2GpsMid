@@ -652,11 +652,16 @@ public class BundleGpsMid implements Runnable {
 
             System.out.println("Starting relation handling");
             startTime = System.currentTimeMillis();
+            
+            //todo tommaso, non sembra che oltre a questo set sull'oggetto Area venga 
+            //fatto nulla di particolare
             Area.setParser(parser);
+            
             //questo metodo permette di escludere dalla relation tutti quegli elementi
-            //che non soddisfano i criteri di routing, per esempio la relation
-            //fa rifermento al routing da parte di un autobus
-            new Relations(parser, staticVariable.getConfig());
+            //che non soddisfano i criteri di routing, per esempio se la relation 
+            //fa rifermento al routing da parte di un autobus oppure se risulta essere una build etc etc
+            Relations test = new Relations(parser, staticVariable.getConfig());
+            
             System.out.println("Relations processed");
             time = (System.currentTimeMillis() - startTime);
             System.out.println("  Time taken: " + time / 1000 + " seconds");
@@ -666,7 +671,7 @@ public class BundleGpsMid implements Runnable {
              * aren't handling to see which ones would be particularly useful to
              * deal with eventually
              */
-            Hashtable<String, Integer> relTypes = new Hashtable<String, Integer>();
+            Hashtable<String, Integer> relTypes = new Hashtable<>();
             for (Relation r : parser.getRelations()) {
                 String type = r.getAttribute("type");
                 if (type == null) {
@@ -702,10 +707,13 @@ public class BundleGpsMid implements Runnable {
             if (Configuration.attrToBoolean(staticVariable.getConfig().useRouting) >= 0) {
                 rd = new RouteData(parser, target.getCanonicalPath());
                 System.out.println("Remembering " + parser.trafficSignalCount + " traffic signal nodes");
+                //Questo metodo colleziona tutti i nodi che risultano essere dei semafori
                 rd.rememberDelayingNodes();
             }
 
             System.out.println("Removing unused nodes");
+            //Todo Tommaso Questo metodo permette di ripulire i nodi/way e relation
+            // Way vengono esclusi tutti quei elementi che non risultano essere vie vere e proprio 
             new CleanUpData(parser, staticVariable.getConfig());
 
             //TODO TOMMASO ...... adesso abbiamo solamente i dati che ci interessano per poter effettuare

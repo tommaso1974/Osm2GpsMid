@@ -168,13 +168,17 @@ public class CleanUpData {
          * ways that have no type. This can save quite a lot of memory depending
          * on style-file
          */
-        ArrayList<Way> rmWays = new ArrayList<Way>();
+        ArrayList<Way> rmWays = new ArrayList<>();
         for (Way w : parser.getWays()) {
             if (w.getType(conf) < 0) {
+                // Stiamo togliendo tutte quelle way che non identificano
+                // le vie vere e proprio per esempio la way=222060924
+                // barrier->retaining_wall
                 rmWays.add(w);
             }
         }
         for (Way w : rmWays) {
+            System.out.println("Stiamo rimuovemendo la way " + w.id + " perchè non è una via ");
             parser.removeWay(w);
         }
     }

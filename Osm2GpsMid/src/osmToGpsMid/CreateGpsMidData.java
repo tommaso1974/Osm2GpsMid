@@ -368,7 +368,8 @@ public class CreateGpsMidData implements FilenameFilter {
              */
             dsi.writeByte(TravelModes.travelModeCount);
             for (int i = 0; i < TravelModes.travelModeCount; i++) {
-                dsi.writeUTF(_(TravelModes.getTravelMode(i).getName()));
+                System.out.println("TravelModes.getTravelMode(i).getName() ->" + TravelModes.getTravelMode(i).getName());  
+                dsi.writeUTF(TravelModes.getTravelMode(i).getName());
                 dsi.writeShort(TravelModes.getTravelMode(i).maxPrepareMeters);
                 dsi.writeShort(TravelModes.getTravelMode(i).maxInMeters);
                 dsi.writeShort(TravelModes.getTravelMode(i).maxEstimationSpeed);

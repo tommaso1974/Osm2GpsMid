@@ -54,7 +54,7 @@ public class RouteData {
      Questo metodo effettue le seguenti operazioni:
      1) Se stiamo creando un pacchetto per Android, andiamo a creare la cartella assets
      2) Cicliamo su tutti i nodi che sono stati filtrati fino ad ora ed eseguiamo i seguenti steo:
-     2a) resetConnectedLineCount
+        2a) resetConnectedLineCount -> ovvero settiamo a zero il campo connectedLineCount
      */
     public void create(Configuration config) {
         if (config.sourceIsApk) {
@@ -75,12 +75,12 @@ public class RouteData {
             // System.out.println("Sto processando la way " + w.getName());
             if (!w.isAccessForAnyRouting()) {
                 //Tommaso se stiamo qui way che stiam processando non risulta essere una strada
-                System.out.println("Saltiamo il processamento");
+                System.out.println("Saltiamo il processamento della way " + w.id);
                 continue;
             }
 
             //Tommaso, se stiam qui la way che stiamo processando risulta essere una strada
-            System.out.println("Continuaimo il processamento");
+            System.out.println("Continuaimo il processamento della way " + w.id);
             // mark nodes in tunnels / on bridges / on motorways to not get later marked as traffic signal delay route node by nearby traffic signals
             WayDescription wayDesc = config.getWayDesc(w.type);
 
@@ -400,6 +400,7 @@ public class RouteData {
         int count = 0;
         byte bearing = 0;
         for (Node n : nl) {
+            System.out.println("Per la way " + w.id + " Sto processando il nodo " + n.id);
             thisIndex++;
             if (from == null) {
                 lastNode = n;
@@ -415,7 +416,19 @@ public class RouteData {
                 if (thisIndex == lastIndex || (n.getConnectedLineCount() != 2)) {
                     RouteNode next = getRouteNode(n);
                     byte endBearing = MyMath.bearing_start(lastNode, n);
+                    System.out.println("----------------------------------------------------");
+                    System.out.println("Connessione dei seguenti elementi");
+                    System.out.println("from.id -> " + from.id);
+                    System.out.println("from.node.id -> " + from.node.id);
+                    System.out.println("next.id -> " + next.id);
+                    System.out.println("next.node.id -> " + next.node.id);
+                    System.out.println("distance -> " + dist);
+                    System.out.println("w.id -> " + w.id);
+                    System.out.println("bearing -> " + bearing);
+                    System.out.println("endBearing -> " + endBearing);
+                    System.out.println("----------------------------------------------------");
                     addConnection(from, next, dist, w, bearing, endBearing);
+                    
                     from = next;
                     dist = 0;
                     count = 1;
@@ -442,7 +455,7 @@ public class RouteData {
 
     /**
      * @param from
-     * @param f
+     * @param to
      * @param dist
      * @param routeNode
      */
@@ -586,6 +599,7 @@ public class RouteData {
         for (RouteNode n : nodes.values()) {
             n.id = id++;
         }
+        return;
     }
 
     public void optimise() {
@@ -684,7 +698,7 @@ public class RouteData {
             OxParser parser = new OxParser(fr, conf);
             System.out.println("Read nodes " + parser.getNodes().size());
             System.out.println("Read ways  " + parser.getNodes().size());
-            new CleanUpData(parser, conf);
+            CleanUpData clean = new CleanUpData(parser, conf);
             RouteData rd = new RouteData(parser, "");
 
             rd.create(conf);

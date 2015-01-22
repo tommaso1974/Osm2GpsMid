@@ -246,6 +246,7 @@ public class OpbfParser extends OsmParser {
                     if (!r.isPartial()) {
                         relIns++;
                         viaNodeOrWayRef = r.getViaNodeOrWayRef();
+                        System.out.println("Stiamo processando la relation Id = " + r.id);
                     } else {
                         relPart++;
                     }
