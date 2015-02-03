@@ -74,7 +74,7 @@ public class Relations {
         while (i.hasNext()) {
             firstWay = null;
             Relation r = i.next();
-            System.out.println("stiamo processando la relation " + r.id);
+            //System.out.println("stiamo processando la relation " + r.id);
            // System.out.println("check relation " + r + "is valid()=" + r.isValid() );
             if (r.isValid()) {
                 Way outerWay = null;

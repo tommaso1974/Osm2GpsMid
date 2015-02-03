@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import javax.swing.tree.TreeNode;
 
-
 import osmToGpsMid.Constants;
 
 public class SingleTile extends Tile {

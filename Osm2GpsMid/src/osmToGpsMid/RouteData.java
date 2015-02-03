@@ -54,7 +54,7 @@ public class RouteData {
      Questo metodo effettue le seguenti operazioni:
      1) Se stiamo creando un pacchetto per Android, andiamo a creare la cartella assets
      2) Cicliamo su tutti i nodi che sono stati filtrati fino ad ora ed eseguiamo i seguenti steo:
-        2a) resetConnectedLineCount -> ovvero settiamo a zero il campo connectedLineCount
+     2a) resetConnectedLineCount -> ovvero settiamo a zero il campo connectedLineCount
      */
     public void create(Configuration config) {
         if (config.sourceIsApk) {
@@ -75,12 +75,12 @@ public class RouteData {
             // System.out.println("Sto processando la way " + w.getName());
             if (!w.isAccessForAnyRouting()) {
                 //Tommaso se stiamo qui way che stiam processando non risulta essere una strada
-                System.out.println("Saltiamo il processamento della way " + w.id);
+                //  System.out.println("Saltiamo il processamento della way " + w.id);
                 continue;
             }
 
             //Tommaso, se stiam qui la way che stiamo processando risulta essere una strada
-            System.out.println("Continuaimo il processamento della way " + w.id);
+            //System.out.println("Continuaimo il processamento della way " + w.id);
             // mark nodes in tunnels / on bridges / on motorways to not get later marked as traffic signal delay route node by nearby traffic signals
             WayDescription wayDesc = config.getWayDesc(w.type);
 
@@ -91,7 +91,7 @@ public class RouteData {
             System.out.println("WayDescription " + wayDesc.description);
 
             // Tommaso Adesso processiamo, per ogni via i nodi che compongono la way
-            System.out.println("Il numero di nodi per la way e' " + w.getNodeCount());
+            //  System.out.println("Il numero di nodi per la way e' " + w.getNodeCount());
             Node lastNode = null;
             for (Node n : w.getNodes()) {
                 n.incConnectedLineCount();
@@ -110,7 +110,7 @@ public class RouteData {
         }
 
         for (Way w : parser.getWays()) {
-            System.out.println("Stiamo processando le way " + w.getId() + " per creare i modelli di routing");
+            //  System.out.println("Stiamo processando le way " + w.getId() + " per creare i modelli di routing");
             //tommaso Saltiamo tutti gli elementi che non sono way effettivie ma sono palazzi/costruzioni
             //cosa che avevamo fatto già prima 
             if (!w.isAccessForAnyRouting()) {
@@ -170,7 +170,7 @@ public class RouteData {
                 //System.out.println(turn.toString(parser.getWayHashMap()));
                 int numFromConnections = 0;
                 long lastId = -1;
-                for (Connection c : nViaFrom.getConnectedFrom()) { 
+                for (Connection c : nViaFrom.getConnectedFrom()) {
                     // TODO: Strange: there are sometimes multiple connections connecting to the same node, filter those out by checking lastId 
 		    /* [ gpsmid-Bugs-3159017 ] Can't parse turn restriction 
                      * rather than only checking if the restrictionFromWay contains the from node
@@ -416,19 +416,19 @@ public class RouteData {
                 if (thisIndex == lastIndex || (n.getConnectedLineCount() != 2)) {
                     RouteNode next = getRouteNode(n);
                     byte endBearing = MyMath.bearing_start(lastNode, n);
-                    System.out.println("----------------------------------------------------");
-                    System.out.println("Connessione dei seguenti elementi");
-                    System.out.println("from.id -> " + from.id);
-                    System.out.println("from.node.id -> " + from.node.id);
-                    System.out.println("next.id -> " + next.id);
-                    System.out.println("next.node.id -> " + next.node.id);
-                    System.out.println("distance -> " + dist);
-                    System.out.println("w.id -> " + w.id);
-                    System.out.println("bearing -> " + bearing);
-                    System.out.println("endBearing -> " + endBearing);
-                    System.out.println("----------------------------------------------------");
+//                    System.out.println("----------------------------------------------------");
+//                    System.out.println("Connessione dei seguenti elementi");
+//                    System.out.println("from.id -> " + from.id);
+//                    System.out.println("from.node.id -> " + from.node.id);
+//                    System.out.println("next.id -> " + next.id);
+//                    System.out.println("next.node.id -> " + next.node.id);
+//                    System.out.println("distance -> " + dist);
+//                    System.out.println("w.id -> " + w.id);
+//                    System.out.println("bearing -> " + bearing);
+//                    System.out.println("endBearing -> " + endBearing);
+//                    System.out.println("----------------------------------------------------");
                     addConnection(from, next, dist, w, bearing, endBearing);
-                    
+
                     from = next;
                     dist = 0;
                     count = 1;

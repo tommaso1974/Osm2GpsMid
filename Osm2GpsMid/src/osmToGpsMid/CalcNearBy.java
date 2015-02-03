@@ -445,7 +445,7 @@ public class CalcNearBy {
         KDTree kd = new KDTree(3);
         //double [] latlonKey = new double[2]; 
         for (Way w : parser.getWays()) {
-            System.out.println("stiamo processando le way " + w.getId() + " da inserire all'interno di un KDtree");
+          //  System.out.println("stiamo processando le way " + w.getId() + " da inserire all'interno di un KDtree");
             if (w.isHighway() /*&& w.getIsIn() == null */) {
                 if (w.getName() == null || w.getName().trim().length() == 0) {
                     continue;

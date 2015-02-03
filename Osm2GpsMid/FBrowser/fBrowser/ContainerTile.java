@@ -12,7 +12,6 @@ import java.io.IOException;
 
 import javax.swing.tree.TreeNode;
 
-
 public class ContainerTile extends Tile {
     //#debug error
 
