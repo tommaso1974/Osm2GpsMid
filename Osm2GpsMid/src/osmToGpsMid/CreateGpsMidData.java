@@ -368,7 +368,7 @@ public class CreateGpsMidData implements FilenameFilter {
              */
             dsi.writeByte(TravelModes.travelModeCount);
             for (int i = 0; i < TravelModes.travelModeCount; i++) {
-                System.out.println("TravelModes.getTravelMode(i).getName() ->" + TravelModes.getTravelMode(i).getName());  
+                System.out.println("TravelModes.getTravelMode(i).getName() ->" + TravelModes.getTravelMode(i).getName());
                 dsi.writeUTF(TravelModes.getTravelMode(i).getName());
                 dsi.writeShort(TravelModes.getTravelMode(i).maxPrepareMeters);
                 dsi.writeShort(TravelModes.getTravelMode(i).maxInMeters);
@@ -976,9 +976,9 @@ public class CreateGpsMidData implements FilenameFilter {
     }
 
     /**
-     * Prepares and writes the whole tile data for the specified zoom level to
-     * the files for dict and tile data. The tile tree's root tile is put into
-     * the member array 'tile'.
+     * TODO TOMMASO.....export delle tiles Prepares and writes the whole tile
+     * data for the specified zoom level to the files for dict and tile data.
+     * The tile tree's root tile is put into the member array 'tile'.
      *
      * @param zl Zoom level or level of detail
      * @return Number of bytes written
@@ -1125,8 +1125,8 @@ public class CreateGpsMidData implements FilenameFilter {
             t = tt.t;
             tileBound = tt.bound;
             // System.out.println("try create tile for " + t.zl + " " + tileBound);
-            ways = new ArrayList<Way>();
-            nodes = new ArrayList<Node>();
+            ways = new ArrayList<>();
+            nodes = new ArrayList<>();
             realBound = new Bounds();
 
             if (t.zl != ROUTEZOOMLEVEL) {
@@ -1137,9 +1137,7 @@ public class CreateGpsMidData implements FilenameFilter {
 
                 ways = getWaysInBound(t.ways, t.zl, tileBound, realBound);
 
-                if (realBound.getFixPtSpan() > 65000
-                        //				    && (t.nodes.size() == nodes.size()) && (t.ways.size() == ways.size())
-                        && (tileBound.maxLat - tileBound.minLat < 0.001)) {
+                if (realBound.getFixPtSpan() > 65000 && (tileBound.maxLat - tileBound.minLat < 0.001)) {
                     System.out.println("ERROR: Tile spacially too large ("
                             + MAX_RAD_RANGE + "tileBound: " + tileBound);
                     System.out.println("ERROR:: Could not reduce tile size for tile " + t);
@@ -1159,7 +1157,7 @@ public class CreateGpsMidData implements FilenameFilter {
                 for (Node n : nodes) {
                     realBound.extend(n.lat, n.lon);
                 }
-                if (ways.size() == 0) {
+                if (ways.isEmpty()) {
                     t.type = Tile.TYPE_EMPTY;
                 }
                 int mostlyInBound = ways.size();

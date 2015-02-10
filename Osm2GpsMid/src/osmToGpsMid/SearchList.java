@@ -323,12 +323,15 @@ public class SearchList {
             short fcount = 0;
             for (Name mapName : names.getNames()) {
                 String string = mapName.getName();
+                System.out.println("Nome della via corrente -> " + string);
+                System.out.println("Nome della via precedente -> " + lastStr);
                 int eq = names.getEqualCount(string, lastStr);
+                System.out.println("Il campo eq vale -> " + eq);
                 if (ds.size() > Configuration.getConfiguration().maxTileSize) {
+                    System.out.println("Il campo idx vale " + idx);
                     dsi.writeInt(idx);
-                    if (ds != null) {
-                        ds.close();
-                    }
+                    ds.close();
+
                     fo = new FileOutputStream(path + "/dat/names-" + fnr + ".dat");
                     ds = new DataOutputStream(fo);
 //					System.out.println("wrote names " + fnr + " with "+ fcount + " names");
@@ -339,6 +342,7 @@ public class SearchList {
                     lastStr = null;
                 }
                 ds.writeByte(eq - curPos);
+                System.out.println("string.substring(eq) -> " + string.substring(eq));
                 ds.writeUTF(string.substring(eq));
 //				ds.writeShort(getWayNameIndex(mapName.getIs_in(), null));
 //				System.out.println("" + (eq-curPos) + "'" +string.substring(eq) + "' '" + string);
@@ -348,6 +352,7 @@ public class SearchList {
                 fcount++;
 //				ds.writeUTF(string);
             }
+            System.out.println("Il campo idx vale " + idx);
             dsi.writeInt(idx);
             ds.close();
             dsi.close();

@@ -750,7 +750,7 @@ public class BundleGpsMid implements Runnable {
             if (staticVariable.getConfig().cleanupTmpDirAfterUse()) {
                 File tmpBaseDir = new File(staticVariable.getConfig().getTempBaseDir());
                 System.out.println("Cleaning up temporary directory " + tmpBaseDir);
-                // deleteDirectory(tmpBaseDir);
+                deleteDirectory(tmpBaseDir);
             }
 
             staticVariable.setCreateSuccessfully(true);

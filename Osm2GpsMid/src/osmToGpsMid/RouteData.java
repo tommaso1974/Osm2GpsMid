@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import osmToGpsMid.model.Connection;
 import osmToGpsMid.model.Node;
+import osmToGpsMid.model.Path;
 import osmToGpsMid.model.RouteNode;
 import osmToGpsMid.model.TravelMode;
 import osmToGpsMid.model.TravelModes;
@@ -51,7 +52,7 @@ public class RouteData {
     }
 
     /*
-     Questo metodo effettue le seguenti operazioni:
+     Tommaso Questo metodo effettue le seguenti operazioni:
      1) Se stiamo creando un pacchetto per Android, andiamo a creare la cartella assets
      2) Cicliamo su tutti i nodi che sono stati filtrati fino ad ora ed eseguiamo i seguenti steo:
      2a) resetConnectedLineCount -> ovvero settiamo a zero il campo connectedLineCount
@@ -71,7 +72,7 @@ public class RouteData {
         // count all connections for all nodes
         System.out.println("Il numero dei way da processare e' " + parser.getWays().size());
         for (Way w : parser.getWays()) {
-            System.out.println("Sto processando la way " + w.getId());
+           // System.out.println("Sto processando la way " + w.getId());
             // System.out.println("Sto processando la way " + w.getName());
             if (!w.isAccessForAnyRouting()) {
                 //Tommaso se stiamo qui way che stiam processando non risulta essere una strada
@@ -88,7 +89,7 @@ public class RouteData {
             // la condizione perchè non sia presente una lanterna semaforica e' la seguente:
             // se è un ponte, se è un tunnel e se ( se non è uno svincolo ma e' una strada ad alto scorrimento [autostrada])
             neverTrafficSignalsRouteNode = (w.isBridge() || w.isTunnel() || (wayDesc.isMotorway() && !wayDesc.isHighwayLink()));
-            System.out.println("WayDescription " + wayDesc.description);
+           // System.out.println("WayDescription " + wayDesc.description);
 
             // Tommaso Adesso processiamo, per ogni via i nodi che compongono la way
             //  System.out.println("Il numero di nodi per la way e' " + w.getNodeCount());
@@ -140,8 +141,17 @@ public class RouteData {
             //Key=type e Value=restriction
             //Key=restriction 	Value=only_right_turn
             TurnRestriction turn = (TurnRestriction) parser.getTurnRestrictionHashMap().get(new Long(n.node.id));
+            HashMap<Long, TurnRestriction> pippo = parser.getTurnRestrictionHashMap();
             while (turn != null) {
                 Way restrictionFromWay = parser.getWayHashMap().get(new Long(turn.fromWayRef));
+                
+                System.out.println("---calculateTurnRestrictions START");
+                System.out.println("restrictionFromWay.getId() = " + restrictionFromWay.getId());
+                List<Node> pathNodesList =restrictionFromWay.path.getNodes();
+                for(Node node : pathNodesList){
+                    System.out.println("---- Path nodeId connection -> " + node.getNodeId());
+                }
+                
                 // skip if restrictionFromWay is not in available wayData				
                 if (restrictionFromWay == null) {
                     System.out.println("  no fromWay");
@@ -156,6 +166,13 @@ public class RouteData {
                     continue;
                 }
 
+                System.out.println("restrictionToWay.getId() = " + restrictionToWay.getId());
+                pathNodesList =restrictionToWay.path.getNodes();
+                for(Node node : pathNodesList){
+                    System.out.println("Path " + node.toString());
+                }
+                System.out.println("---calculateTurnRestrictions END");
+                
                 turn.viaRouteNode = n;
                 turn.viaLat = n.node.lat;
                 turn.viaLon = n.node.lon;
@@ -400,7 +417,7 @@ public class RouteData {
         int count = 0;
         byte bearing = 0;
         for (Node n : nl) {
-            System.out.println("Per la way " + w.id + " Sto processando il nodo " + n.id);
+           // System.out.println("Per la way " + w.id + " Sto processando il nodo " + n.id);
             thisIndex++;
             if (from == null) {
                 lastNode = n;

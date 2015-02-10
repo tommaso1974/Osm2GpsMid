@@ -296,7 +296,7 @@ public class CalcNearBy {
                 //TODO Tommaso, prendendo un nodo, che ha il numero civico, andiamo a verificare quale sia la strada
                 //più vicina; per fare questo possiamo utilizzare il calcolo mediante l'oggetto KDTREE per creare uno spazio
                 //tridimensionale in cui effettuare la ricerca
-                System.out.println("Stiamo processando il nodo " + n.getNodeId() + " perchè presenta un numero civico");
+              //  System.out.println("Stiamo processando il nodo " + n.getNodeId() + " perchè presenta un numero civico");
                 long way = calcWayForHouseNumber((Entity) n, wayHashMap);
                 System.out.println("Got id " + way + " for housenumber node " + n);
                 if (way != 0 && !n.containsKey("__wayid")) {
@@ -412,7 +412,7 @@ public class CalcNearBy {
         KDTree kd = new KDTree(3);
         //double [] latlonKey = new double[2]; 
         for (Node n : parser.getNodes()) {
-            System.out.println("Stiamo processando il nodo: " + n.getNodeId());
+           // System.out.println("Stiamo processando il nodo: " + n.getNodeId());
             if (n.isPlace()) {
                 // Tommaso, andiamo a verificare se nodo presenta il tag place
                 //latlonKey[0] = n.lat;

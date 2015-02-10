@@ -120,12 +120,12 @@ public abstract class OsmParser {
      * @param turnRestriction
      */
     public void addTurnRestriction(long viaNodeOrWayRef, TurnRestriction turnRestriction) {
-        if (!turnRestrictions.containsKey(new Long(viaNodeOrWayRef))) {
-            turnRestrictions.put(new Long(viaNodeOrWayRef), turnRestriction);
+        if (!turnRestrictions.containsKey(viaNodeOrWayRef)) {
+            turnRestrictions.put(viaNodeOrWayRef, turnRestriction);
             // System.out.println("Put turn restrictions at " +
             // viaNodeOrWayRef);
         } else {
-            TurnRestriction baseTurnRestriction = (TurnRestriction) turnRestrictions.get(new Long(viaNodeOrWayRef));
+            TurnRestriction baseTurnRestriction = (TurnRestriction) turnRestrictions.get(viaNodeOrWayRef);
             while (baseTurnRestriction.nextTurnRestrictionAtThisNode != null) {
                 baseTurnRestriction = baseTurnRestriction.nextTurnRestrictionAtThisNode;
             }

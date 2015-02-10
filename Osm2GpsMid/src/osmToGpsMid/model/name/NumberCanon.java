@@ -7,6 +7,7 @@
  */
 package osmToGpsMid.model.name;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -17,9 +18,9 @@ public class NumberCanon {
     private static char[] charMapCore; //fast direct lookup table (Can't cover the entire unicode code range though)
     private static char[] charMapExtendedKey = new char[0]; //ordered Map to store the rest of the char -> num mappings
     private static char[] charMapExtendedValue = new char[0];
-    private static char minFastRange = 1; //Specify the codepoint range that gets mapped in the lookup table
-    private static char maxFastRange = 256;
-    private static char defaultChar = '1'; //All unknown characters get mapped to this
+    private static final char minFastRange = 1; //Specify the codepoint range that gets mapped in the lookup table
+    private static final char maxFastRange = 256;
+    private static final char defaultChar = '1'; //All unknown characters get mapped to this
     private static final int canonType = 0;
     private static final int normType = 2;
 
@@ -123,7 +124,7 @@ public class NumberCanon {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
     }
@@ -132,7 +133,7 @@ public class NumberCanon {
         if (charMapCore == null) {
             initCharMaps();
         }
-        StringBuffer erg = new StringBuffer();
+        StringBuilder erg = new StringBuilder();
         //System.out.print("canonial '" + s + "' ");
         for (int i = 0; i < s.length(); i++) {
             erg.append(getNumberOf(s.charAt(i)));

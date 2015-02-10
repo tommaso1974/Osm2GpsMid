@@ -41,8 +41,8 @@ import osmToGpsMid.model.RouteNode;
  */
 public class AStar2 {
 
-    private final Hashtable<RouteNode, Node> open = new Hashtable<RouteNode, Node>(500);
-    private final Hashtable<RouteNode, Node> closed = new Hashtable<RouteNode, Node>(500);
+    private final Hashtable<RouteNode, Node> open = new Hashtable<>(500);
+    private final Hashtable<RouteNode, Node> closed = new Hashtable<>(500);
     public int evaluated = 0;
     public int expanded = 0;
     public long bestTotal = 0;

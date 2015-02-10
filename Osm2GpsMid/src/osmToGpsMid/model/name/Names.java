@@ -64,11 +64,11 @@ public class Names {
         if (w.getName() == null) {
             return;
         }
-        System.out.println("w.getName().trim().length()  = " + w.getName().trim().length() );
+       // System.out.println("w.getName().trim().length()  = " + w.getName().trim().length() );
         if (w.getName().trim().length() == 0) {
             return;
         }
-        System.out.println("w.getName()  = " + w.getName().trim() );
+     //   System.out.println("w.getName()  = " + w.getName().trim() );
         boolean houseNumber = false;
         if (w instanceof Node) {
             short type = (short) ((Node) w).getType(Configuration.getConfiguration());
